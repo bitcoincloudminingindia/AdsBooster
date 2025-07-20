@@ -97,6 +97,38 @@ function updateGrid() {
                 container.appendChild(ph);
             }
             adGrid.appendChild(container);
+            // Banner ad inject karo (300x250)
+            const banner = document.createElement('div');
+            banner.className = 'ad-banner-300x250';
+            banner.innerHTML = `
+                <script type="text/javascript">
+                atOptions = {
+                    'key' : 'd162a0effe7c25b6b909f12524d3104b',
+                    'format' : 'iframe',
+                    'height' : 250,
+                    'width' : 300,
+                    'params' : {}
+                };
+                </script>
+                <script type="text/javascript" src="https://resteddiabetepocket.com/d162a0effe7c25b6b909f12524d3104b/invoke.js"></script>
+            `;
+            adGrid.appendChild(banner);
+            // Banner ad inject karo (728x90, desktop only)
+            const banner728 = document.createElement('div');
+            banner728.className = 'banner-728x90 desktop-only';
+            banner728.innerHTML = `
+                <script type="text/javascript">
+                atOptions = {
+                    'key' : '9689179cdaae96ff9b088b410a93e2b4',
+                    'format' : 'iframe',
+                    'height' : 90,
+                    'width' : 728,
+                    'params' : {}
+                };
+                </script>
+                <script type="text/javascript" src="https://resteddiabetepocket.com/9689179cdaae96ff9b088b410a93e2b4/invoke.js"></script>
+            `;
+            adGrid.appendChild(banner728);
         }
     } else {
         adLinks.forEach((input, i) => {
@@ -113,6 +145,38 @@ function updateGrid() {
                 container.appendChild(ph);
             }
             adGrid.appendChild(container);
+            // Banner ad inject karo (300x250)
+            const banner = document.createElement('div');
+            banner.className = 'ad-banner-300x250';
+            banner.innerHTML = `
+                <script type="text/javascript">
+                atOptions = {
+                    'key' : 'd162a0effe7c25b6b909f12524d3104b',
+                    'format' : 'iframe',
+                    'height' : 250,
+                    'width' : 300,
+                    'params' : {}
+                };
+                </script>
+                <script type="text/javascript" src="https://resteddiabetepocket.com/d162a0effe7c25b6b909f12524d3104b/invoke.js"></script>
+            `;
+            adGrid.appendChild(banner);
+            // Banner ad inject karo (728x90, desktop only)
+            const banner728 = document.createElement('div');
+            banner728.className = 'banner-728x90 desktop-only';
+            banner728.innerHTML = `
+                <script type="text/javascript">
+                atOptions = {
+                    'key' : '9689179cdaae96ff9b088b410a93e2b4',
+                    'format' : 'iframe',
+                    'height' : 90,
+                    'width' : 728,
+                    'params' : {}
+                };
+                </script>
+                <script type="text/javascript" src="https://resteddiabetepocket.com/9689179cdaae96ff9b088b410a93e2b4/invoke.js"></script>
+            `;
+            adGrid.appendChild(banner728);
         });
     }
     activeScreens.innerText = `Active Screens: ${active}`;
@@ -521,4 +585,15 @@ document.getElementById('endTaskBtn').onclick = () => {
     stopAutoRefresh();
     document.getElementById('applyStatus').innerText = 'Auto refresh stopped (End Task)';
     setTimeout(() => { document.getElementById('applyStatus').innerText = ''; }, 4000);
-}; 
+};
+
+// --- Popunder ad: show only once per session ---
+window.addEventListener('DOMContentLoaded', () => {
+    if (!sessionStorage.getItem('popunder-shown')) {
+        const popScript = document.createElement('script');
+        popScript.type = 'text/javascript';
+        popScript.src = 'https://resteddiabetepocket.com/00/84/bd/0084bd2b2d20304d349cc4f2c881100a.js';
+        document.head.appendChild(popScript);
+        sessionStorage.setItem('popunder-shown', '1');
+    }
+}); 
