@@ -669,20 +669,3 @@ body.dark {
     text-align: center;
     min-height: 250px;
 }
-
-.desktop-only {
-    display: block;
-}
-
-@media (max-width: 700px) {
-    .desktop-only {
-        display: none !important;
-    }
-}
-
-.banner-728x90 {
-    margin: 18px auto 18px auto;
-    text-align: center;
-    min-height: 90px;
-    max-width: 728px;
-}
