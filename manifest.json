@@ -1,0 +1,21 @@
+{
+    "name": "AdsBooster",
+    "short_name": "AdsBooster",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#1976d2",
+    "theme_color": "#1976d2",
+    "description": "Maximize ad impressions by running one ad link or multiple links across 10 browser windows simultaneously.",
+    "icons": [
+        {
+            "src": "icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

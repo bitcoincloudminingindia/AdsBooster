@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AdsBooster – Safe Version</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png">
+    <!--
+      Note: meta[name=theme-color] is supported in Chrome, Edge, Android Chrome, but not in Firefox, Firefox for Android, or Opera. 
+      It is safe to keep for enhanced UI on supported browsers. See: https://developer.mozilla.org/docs/Web/HTML/Element/meta/name/theme-color
+    -->
+    <meta name="theme-color" content="#1976d2">
+</head>
+
+<body>
+    <header>
+        <img src="App Icon.png" alt="AdsBooster Logo" class="app-logo small-logo">
+        <h1 class="header-title">AdsBooster</h1>
+        <button id="infoBtn" title="Earning Tips">ℹ️</button>
+        <!-- <button id="userGuideBtn" title="User Guide" class="ml-1rem">❓</button> -->
+    </header>
+    <!-- Pre-Qualification Modal -->
+    <div id="prequalModal" class="modal show">
+        <div class="modal-content">
+            <h2>Enable Ads to Earn Rewards</h2>
+            <p>Activate High CPM Mode to start earning by viewing ads.<br>Only users who accept will see ads and earn
+                rewards.</p>
+            <button id="prequalAcceptBtn">Accept & Start Earning</button>
+            <button id="prequalSkipBtn" class="btn-skip">Skip</button>
+        </div>
+    </div>
+    <main>
+        <section class="mode-switch">
+            <label><input type="radio" name="mode" value="single" checked> Single Link (All Screens)</label>
+            <label><input type="radio" name="mode" value="multi"> Multiple Links (Each Screen)</label>
+        </section>
+        <section class="ad-links single-link-section">
+            <input type="url" id="singleLinkInput" placeholder="Paste ad link or website URL...">
+        </section>
+        <section class="ad-links multi-link-section hidden">
+            <!-- 10 input boxes for ad links -->
+            <div class="ad-link-row">
+                <label>1</label><input type="url" class="ad-link" placeholder="Paste ad link or website URL...">
+            </div>
+            <div class="ad-link-row">
+                <label>2</label><input type="url" class="ad-link" placeholder="Paste ad link or website URL...">
+            </div>
+            <div class="ad-link-row">
+                <label>3</label><input type="url" class="ad-link" placeholder="Paste ad link or website URL...">
+            </div>
+            <div class="ad-link-row">
+                <label>4</label><input type="url" class="ad-link" placeholder="Paste ad link or website URL...">
+            </div>
+            <div class="ad-link-row">
+                <label>5</label><input type="url" class="ad-link" placeholder="Paste ad link or website URL...">
+            </div>
+            <div class="ad-link-row">
+                <label>6</label><input type="url" class="ad-link" placeholder="Paste ad link or website URL...">
+            </div>
+            <div class="ad-link-row">
+                <label>7</label><input type="url" class="ad-link" placeholder="Paste ad link or website URL...">
+            </div>
+            <div class="ad-link-row">
+                <label>8</label><input type="url" class="ad-link" placeholder="Paste ad link or website URL...">
+            </div>
+            <div class="ad-link-row">
+                <label>9</label><input type="url" class="ad-link" placeholder="Paste ad link or website URL...">
+            </div>
+            <div class="ad-link-row">
+                <label>10</label><input type="url" class="ad-link" placeholder="Paste ad link or website URL...">
+            </div>
+            <button id="saveLinksBtn">Save My Links</button>
+        </section>
+        <section class="controls">
+            <div class="refresh-group">
+                <div class="refresh-mode-switch">
+                    <label><input type="radio" name="refreshMode" value="auto" checked> Auto Refresh</label>
+                    <label><input type="radio" name="refreshMode" value="manual"> Manual Refresh</label>
+                </div>
+                <label>Interval (sec): <input type="number" id="refreshInterval" min="10" max="60" value="15"></label>
+                <button id="refreshBtn">Manual Refresh</button>
+            </div>
+            <label><input type="checkbox" id="ipRotateToggle"> IP Rotation</label>
+            <label>Country:
+                <select id="countrySelect">
+                    <option value="">Any</option>
+                    <option value="US">US</option>
+                    <option value="GB">UK</option>
+                    <option value="IN">India</option>
+                    <option value="DE">Germany</option>
+                    <option value="FR">France</option>
+                </select>
+            </label>
+            <button id="exportStatsBtn">Export Stats</button>
+            <button id="proxyStatusBtn">🌐 Proxy Status</button>
+            <span id="refreshCounter">Refreshed: 0</span>
+            <span id="activeScreens">Active Screens: 0</span>
+        </section>
+        <div class="apply-bar">
+            <button id="applyBtn">Submit / Apply Changes</button>
+            <button id="endTaskBtn" class="end-task-btn">End Task</button>
+            <span id="applyStatus" class="apply-status"></span>
+        </div>
+        <section id="adGrid" class="ad-grid">
+            <!-- 10 iframes will be injected here -->
+        </section>
+    </main>
+    <!-- Popup Guide -->
+    <div id="popupGuide" class="modal">
+        <div class="modal-content">
+            <h2>Welcome to AdsBooster!</h2>
+            <p>
+                Paste your Adsterra Direct Link or any ad-enabled website link in the boxes below.<br>
+                <b>Click Refresh All Ads</b> and interact with ads naturally (scroll, click).<br>
+                <b>Note:</b> Do not force click or auto-refresh. Manual refresh helps avoid invalid traffic.
+            </p>
+            <button id="gotItBtn">Got It</button>
+        </div>
+    </div>
+    <!-- Earning Tips Modal -->
+    <div id="tipsModal" class="modal">
+        <div class="modal-content">
+            <h2>Earning Tips</h2>
+            <ul>
+                <li>Do not force click on ads.</li>
+                <li>Manual refresh helps avoid invalid traffic.</li>
+                <li>Real user interaction will improve CPM.</li>
+            </ul>
+            <button id="closeTipsBtn">Close</button>
+        </div>
+    </div>
+    <!-- User Guide Modal -->
+    <div id="userGuideModal" class="modal">
+        <div class="modal-content">
+            <h2>How to Use AdsBooster</h2>
+            <ol class="user-guide-list">
+                <li><b>Open the App:</b> First, a popup will appear – “Enable Ads to Earn Rewards”.</li>
+                <li><b>Accept:</b> Click Accept to start seeing ads and earning.</li>
+                <li><b>Select Country:</b> Only US, UK, CA, AU are allowed.</li>
+                <li><b>Enter Ad Links:</b> Paste your ad links in single or multiple mode.</li>
+                <li><b>View Ads:</b> Ads will show on up to 10 screens, you can refresh too.</li>
+                <li><b>Earn Rewards:</b> The more ads you view, the more coins/rewards you get (future update).</li>
+                <li><b>Export Stats:</b> You can export your ad view stats.</li>
+                <li><b>Proxy Status:</b> See backend health with the 🌐 Proxy Status button.</li>
+                <li><b>Note:</b> Ads may not show on low-end devices or non-high-CPM countries.</li>
+            </ol>
+            <button id="closeUserGuideBtn">Close</button>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+
+</html>
