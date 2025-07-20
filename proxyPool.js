@@ -39,14 +39,14 @@ function getAllWebshareProxies(country) {
 
 // --- Existing ProxyScrape & ScraperAPI Configs (unchanged) ---
 const scraperApiConfig = {
-    apiKey: process.env.SCRAPERAPI_KEY || '9b8da492a0cc31782afee7fc755e5ab0',
+    apiKey: process.env.SCRAPERAPI_KEY,
     baseUrl: 'https://api.scraperapi.com/',
     monthlyLimit: 5000,
     used: 0,
     active: true
 };
 const proxyScrapeConfig = {
-    apiKey: process.env.PROXYSCRAPE_KEY || 'vzv5tsct9066lqkh6qdu',
+    apiKey: process.env.PROXYSCRAPE_KEY,
     baseUrl: 'https://proxyscrape.com/v2/',
     monthlyLimit: 10000,
     used: 0,
