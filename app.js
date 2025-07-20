@@ -512,6 +512,18 @@ refreshModeRadios.forEach(radio => {
     radio.addEventListener('change', updateRefreshMode);
 });
 
+function updateApplyBtnState() {
+    if (!countrySelect.value) {
+        applyBtn.disabled = true;
+        applyStatus.innerText = 'Please select a country to continue';
+    } else {
+        applyBtn.disabled = false;
+        applyStatus.innerText = '';
+    }
+}
+countrySelect.addEventListener('change', updateApplyBtnState);
+window.addEventListener('DOMContentLoaded', updateApplyBtnState);
+
 // On page load, set refresh mode
 window.addEventListener('DOMContentLoaded', () => {
     updateRefreshMode();
