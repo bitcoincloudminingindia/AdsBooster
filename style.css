@@ -139,7 +139,7 @@ button:disabled {
 .ad-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(5, 180px);
+    grid-template-rows: repeat(10, 180px);
     gap: 1rem;
     width: 100%;
 }
@@ -662,10 +662,4 @@ body.dark {
     margin: 20px auto;
     max-width: 728px;
     text-align: center;
-}
-
-.ad-banner-300x250 {
-    margin: 12px auto 24px auto;
-    text-align: center;
-    min-height: 250px;
 }

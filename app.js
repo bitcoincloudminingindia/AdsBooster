@@ -97,22 +97,6 @@ function updateGrid() {
                 container.appendChild(ph);
             }
             adGrid.appendChild(container);
-            // Banner ad inject karo
-            const banner = document.createElement('div');
-            banner.className = 'ad-banner-300x250';
-            banner.innerHTML = `
-                <script type="text/javascript">
-                atOptions = {
-                  'key' : 'd162a0effe7c25b6b909f12524d3104b',
-                  'format' : 'iframe',
-                  'height' : 250,
-                  'width' : 300,
-                  'params' : {}
-                };
-                </script>
-                <script type="text/javascript" src="https://resteddiabetepocket.com/d162a0effe7c25b6b909f12524d3104b/invoke.js"></script>
-            `;
-            adGrid.appendChild(banner);
         }
     } else {
         adLinks.forEach((input, i) => {
@@ -129,22 +113,6 @@ function updateGrid() {
                 container.appendChild(ph);
             }
             adGrid.appendChild(container);
-            // Banner ad inject karo
-            const banner = document.createElement('div');
-            banner.className = 'ad-banner-300x250';
-            banner.innerHTML = `
-                <script type="text/javascript">
-                atOptions = {
-                  'key' : 'd162a0effe7c25b6b909f12524d3104b',
-                  'format' : 'iframe',
-                  'height' : 250,
-                  'width' : 300,
-                  'params' : {}
-                };
-                </script>
-                <script type="text/javascript" src="https://resteddiabetepocket.com/d162a0effe7c25b6b909f12524d3104b/invoke.js"></script>
-            `;
-            adGrid.appendChild(banner);
         });
     }
     activeScreens.innerText = `Active Screens: ${active}`;
