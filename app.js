@@ -447,7 +447,7 @@ function checkCountryEligibility() {
 }
 // Restrict countrySelect options
 function restrictCountryOptions() {
-    const allowed = ['', 'US', 'UK', 'CA', 'AU'];
+    const allowed = ['', 'US', 'UK', 'FR', 'HR'];
     Array.from(countrySelect.options).forEach(opt => {
         if (!allowed.includes(opt.value)) opt.style.display = 'none';
         else opt.style.display = '';

@@ -172,6 +172,20 @@ let lastUsedProxyInfo = null;
 // --- Main getProxy function (triple provider, multi-account) ---
 function getProxy({ country, city, session }) {
     const normCountry = normalizeCountryCode(country);
+    // If 'Any' (blank), try ScraperAPI first
+    if (!country || country === '' || normCountry === 'US') {
+        const scraperProxy = getScraperApiProxy('US');
+        if (scraperProxy) {
+            lastUsedProxyInfo = {
+                ip: null,
+                port: null,
+                provider: scraperProxy.provider,
+                country: scraperProxy.country,
+                type: scraperProxy.type
+            };
+            return scraperProxy;
+        }
+    }
     // 1. Try Webshare.io (multi-account)
     const webshareProxy = getWebshareProxy(normCountry);
     if (webshareProxy) {
@@ -185,10 +199,10 @@ function getProxy({ country, city, session }) {
         return webshareProxy;
     }
     // 2. Try ProxyScrape
-    const proxyScrapeProxy = getProxyScrapeProxy(country);
+    const proxyScrapeProxy = getProxyScrapeProxy(normCountry);
     if (proxyScrapeProxy) {
         lastUsedProxyInfo = {
-            ip: null, // ProxyScrape is a URL, not direct IP
+            ip: null,
             port: null,
             provider: proxyScrapeProxy.provider,
             country: proxyScrapeProxy.country,
@@ -196,17 +210,19 @@ function getProxy({ country, city, session }) {
         };
         return proxyScrapeProxy;
     }
-    // 3. Try ScraperAPI
-    const scraperProxy = getScraperApiProxy(country);
-    if (scraperProxy) {
-        lastUsedProxyInfo = {
-            ip: null, // ScraperAPI is a URL, not direct IP
-            port: null,
-            provider: scraperProxy.provider,
-            country: scraperProxy.country,
-            type: scraperProxy.type
-        };
-        return scraperProxy;
+    // 3. Try ScraperAPI (for specific country)
+    if (country && country !== '' && normCountry !== 'US') {
+        const scraperProxy = getScraperApiProxy(normCountry);
+        if (scraperProxy) {
+            lastUsedProxyInfo = {
+                ip: null,
+                port: null,
+                provider: scraperProxy.provider,
+                country: scraperProxy.country,
+                type: scraperProxy.type
+            };
+            return scraperProxy;
+        }
     }
     // None available
     lastUsedProxyInfo = null;
