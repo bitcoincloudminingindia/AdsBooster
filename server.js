@@ -193,6 +193,30 @@ app.get('/fetch', async (req, res) => {
     }
 });
 
+// /test-link?url=...&country=...
+app.get('/test-link', async (req, res) => {
+    const { url, country } = req.query;
+    if (!url) return res.status(400).json({ error: 'Missing url param' });
+    try {
+        const proxy = getProxy({ country });
+        if (!proxy) return res.status(502).json({ error: 'No proxy available for country: ' + country });
+        const axiosConfig = {
+            proxy: proxy.axiosConfig,
+            headers: proxy.headers,
+            timeout: 7000,
+            validateStatus: () => true,
+        };
+        const response = await require('axios').get(url, axiosConfig);
+        if (response.status === 200) {
+            res.json({ success: true, status: response.status });
+        } else {
+            res.status(400).json({ success: false, status: response.status, error: 'Non-200 status' });
+        }
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
 // Get proxy provider status
 app.get('/proxy-status', (req, res) => {
     try {

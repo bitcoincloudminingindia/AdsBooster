@@ -60,6 +60,36 @@
             <label><input type="radio" name="mode" value="single" checked> Single Link (All Screens)</label>
             <label><input type="radio" name="mode" value="multi"> Multiple Links (Each Screen)</label>
         </section>
+        <section class="controls">
+            <div class="refresh-group">
+                <div class="refresh-mode-switch">
+                    <label><input type="radio" name="refreshMode" value="auto" checked> Auto Refresh</label>
+                    <label><input type="radio" name="refreshMode" value="manual"> Manual Refresh</label>
+                </div>
+                <label>Interval (sec): <input type="number" id="refreshInterval" min="10" max="60" value="15"></label>
+                <button id="refreshBtn">Manual Refresh</button>
+            </div>
+            <label><input type="checkbox" id="ipRotateToggle"> IP Rotation</label>
+            <label>Country:
+                <select id="countrySelect">
+                    <option value="">Any</option>
+                    <option value="US">US</option>
+                    <option value="UK">UK</option>
+                    <option value="IN">India</option>
+                    <option value="DE">Germany</option>
+                    <option value="FR">France</option>
+                </select>
+            </label>
+            <button id="exportStatsBtn">Export Stats</button>
+            <button id="proxyStatusBtn">🌐 Proxy Status</button>
+            <span id="refreshCounter">Refreshed: 0</span>
+            <span id="activeScreens">Active Screens: 0</span>
+        </section>
+        <div class="apply-bar">
+            <button id="applyBtn">Submit / Apply Changes</button>
+            <button id="endTaskBtn" class="end-task-btn">End Task</button>
+            <span id="applyStatus" class="apply-status"></span>
+        </div>
         <section class="ad-links single-link-section">
             <input type="url" id="singleLinkInput" placeholder="Paste ad link or website URL...">
         </section>
@@ -97,36 +127,6 @@
             </div>
             <button id="saveLinksBtn">Save My Links</button>
         </section>
-        <section class="controls">
-            <div class="refresh-group">
-                <div class="refresh-mode-switch">
-                    <label><input type="radio" name="refreshMode" value="auto" checked> Auto Refresh</label>
-                    <label><input type="radio" name="refreshMode" value="manual"> Manual Refresh</label>
-                </div>
-                <label>Interval (sec): <input type="number" id="refreshInterval" min="10" max="60" value="15"></label>
-                <button id="refreshBtn">Manual Refresh</button>
-            </div>
-            <label><input type="checkbox" id="ipRotateToggle"> IP Rotation</label>
-            <label>Country:
-                <select id="countrySelect">
-                    <option value="">Any</option>
-                    <option value="US">US</option>
-                    <option value="GB">UK</option>
-                    <option value="IN">India</option>
-                    <option value="DE">Germany</option>
-                    <option value="FR">France</option>
-                </select>
-            </label>
-            <button id="exportStatsBtn">Export Stats</button>
-            <button id="proxyStatusBtn">🌐 Proxy Status</button>
-            <span id="refreshCounter">Refreshed: 0</span>
-            <span id="activeScreens">Active Screens: 0</span>
-        </section>
-        <div class="apply-bar">
-            <button id="applyBtn">Submit / Apply Changes</button>
-            <button id="endTaskBtn" class="end-task-btn">End Task</button>
-            <span id="applyStatus" class="apply-status"></span>
-        </div>
         <section id="adGrid" class="ad-grid">
             <!-- 10 iframes will be injected here -->
         </section>

@@ -272,6 +272,17 @@ function getProviderStatus() {
     return status;
 }
 
+// Add function to get available countries with at least one proxy
+function getAvailableCountries() {
+    const countries = [];
+    for (const country of ['US', 'UK', 'FR', 'HR']) {
+        if (getAllWebshareProxies(country).length > 0) {
+            countries.push(country);
+        }
+    }
+    return countries;
+}
+
 // --- Exported functions ---
 module.exports = {
     getProxy,
@@ -279,5 +290,6 @@ module.exports = {
     markProxyFailed,
     markScraperApiUsed,
     markProxyScrapeUsed,
-    lastUsedProxyInfo
+    lastUsedProxyInfo,
+    getAvailableCountries // export new function
 }; 

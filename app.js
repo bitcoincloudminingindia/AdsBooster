@@ -79,7 +79,19 @@ function saveLinks() {
 }
 
 // --- Grid rendering ---
-function updateGrid() {
+// Helper to test if a link is accessible from the selected country/proxy
+async function testLinkWithProxy(url, country) {
+    try {
+        const response = await fetch(`/test-link?url=${encodeURIComponent(url)}&country=${country}`);
+        const data = await response.json();
+        return data.success === true;
+    } catch (err) {
+        return false;
+    }
+}
+
+// Update updateGrid to test each link before rendering iframe
+async function updateGrid() {
     adGrid.innerHTML = '';
     let active = 0;
     if (mode === 'single') {
@@ -88,8 +100,18 @@ function updateGrid() {
             const container = document.createElement('div');
             container.className = 'ad-frame-container';
             if (url) {
-                active++;
-                renderIframe(container, url, i);
+                // Test link before rendering iframe
+                const country = getSelectedCountry();
+                const ok = await testLinkWithProxy(url, country);
+                if (ok) {
+                    active++;
+                    renderIframe(container, url, i);
+                } else {
+                    const ph = document.createElement('div');
+                    ph.className = 'placeholder error';
+                    ph.innerText = 'Link not accessible from selected country/proxy';
+                    container.appendChild(ph);
+                }
             } else {
                 const ph = document.createElement('div');
                 ph.className = 'placeholder';
@@ -99,13 +121,22 @@ function updateGrid() {
             adGrid.appendChild(container);
         }
     } else {
-        adLinks.forEach((input, i) => {
-            const url = input.value.trim();
+        for (let i = 0; i < adLinks.length; i++) {
+            const url = adLinks[i].value.trim();
             const container = document.createElement('div');
             container.className = 'ad-frame-container';
             if (url) {
-                active++;
-                renderIframe(container, url, i);
+                const country = getSelectedCountry();
+                const ok = await testLinkWithProxy(url, country);
+                if (ok) {
+                    active++;
+                    renderIframe(container, url, i);
+                } else {
+                    const ph = document.createElement('div');
+                    ph.className = 'placeholder error';
+                    ph.innerText = 'Link not accessible from selected country/proxy';
+                    container.appendChild(ph);
+                }
             } else {
                 const ph = document.createElement('div');
                 ph.className = 'placeholder';
@@ -113,7 +144,7 @@ function updateGrid() {
                 container.appendChild(ph);
             }
             adGrid.appendChild(container);
-        });
+        }
     }
     activeScreens.innerText = `Active Screens: ${active}`;
 }
@@ -301,7 +332,7 @@ countrySelect.addEventListener('change', () => {
 });
 
 // --- Apply/Submit logic ---
-document.getElementById('applyBtn').onclick = () => {
+document.getElementById('applyBtn').onclick = async () => {
     // Apply all tempState to UI and logic
     // 1. Mode
     mode = tempState.mode;
@@ -327,11 +358,13 @@ document.getElementById('applyBtn').onclick = () => {
     // 6. Save links
     saveLinks();
     // 7. Update grid and refresh logic
-    updateGrid(); // ONLY here!
+    await updateGrid(); // ONLY here! (now async)
     if (tempState.refreshMode === 'auto') startAutoRefresh();
     else stopAutoRefresh();
     document.getElementById('applyStatus').innerText = 'Changes applied!';
     setTimeout(() => { document.getElementById('applyStatus').innerText = ''; }, 2000);
+    // After apply, check proxy status and show/hide link input
+    await checkProxyStatusAndShowLinks();
 };
 
 // --- Pre-Qualification Logic ---
@@ -542,4 +575,38 @@ document.getElementById('endTaskBtn').onclick = () => {
     stopAutoRefresh();
     document.getElementById('applyStatus').innerText = 'Auto refresh stopped (End Task)';
     setTimeout(() => { document.getElementById('applyStatus').innerText = ''; }, 4000);
-}; 
+};
+
+// Hide link input sections by default
+singleLinkSection.style.display = 'none';
+multiLinkSection.style.display = 'none';
+
+// Add function to check proxy status after Apply
+async function checkProxyStatusAndShowLinks() {
+    try {
+        const response = await fetch('/proxy-status');
+        const data = await response.json();
+        // Find the selected country in the proxy list
+        const selectedCountry = getSelectedCountry();
+        const activeProvider = data.providers.find(p => p.country === selectedCountry && p.active);
+        if (activeProvider) {
+            // Proxy for selected country is active, show link input
+            if (mode === 'single') {
+                singleLinkSection.style.display = '';
+                multiLinkSection.style.display = 'none';
+            } else {
+                singleLinkSection.style.display = 'none';
+                multiLinkSection.style.display = '';
+            }
+            document.getElementById('applyStatus').innerText = 'Proxy is active. You can now enter links.';
+        } else {
+            singleLinkSection.style.display = 'none';
+            multiLinkSection.style.display = 'none';
+            document.getElementById('applyStatus').innerText = 'No active proxy for selected country. Please select another country or try again.';
+        }
+    } catch (err) {
+        singleLinkSection.style.display = 'none';
+        multiLinkSection.style.display = 'none';
+        document.getElementById('applyStatus').innerText = 'Error checking proxy status: ' + err.message;
+    }
+} 
