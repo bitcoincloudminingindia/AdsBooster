@@ -663,19 +663,3 @@ body.dark {
     max-width: 728px;
     text-align: center;
 }
-
-.main-headline {
-    font-size: 2rem;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-}
-
-.main-description {
-    font-size: 1.1rem;
-    margin: 0 0 1rem 0;
-}
-
-.free-offer {
-    color: green;
-    font-weight: bold;
-}
