@@ -154,6 +154,11 @@ function renderIframe(container, url, idx) {
     const spinner = document.createElement('div');
     spinner.className = 'progress-indicator';
     container.appendChild(spinner);
+    // Fallback: always remove spinner after 10s
+    const removeSpinner = () => {
+        if (spinner && spinner.parentNode) spinner.parentNode.removeChild(spinner);
+    };
+    setTimeout(removeSpinner, 10000);
     // Use backend fetch
     const iframe = document.createElement('iframe');
     iframe.className = 'ad-frame';
@@ -166,13 +171,13 @@ function renderIframe(container, url, idx) {
     iframe.src = backendUrl;
     iframe.onload = () => {
         hidePlaceholder(container);
-        spinner.remove();
+        removeSpinner();
         stats[idx].loads++;
         stats[idx].lastUrl = url;
     };
     iframe.onerror = () => {
         showPlaceholder(container);
-        spinner.remove();
+        removeSpinner();
     };
     container.appendChild(iframe);
 }

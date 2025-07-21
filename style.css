@@ -329,6 +329,8 @@ button:disabled {
     border-top: 4px solid #1976d2;
     border-radius: 50%;
     animation: spin 1s linear infinite;
+    pointer-events: none;
+    /* Allow interaction with iframe after spinner is gone */
 }
 
 @keyframes spin {
