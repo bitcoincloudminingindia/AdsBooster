@@ -139,7 +139,7 @@ app.get('/fetch', async (req, res) => {
                 });
 
                 // Update ScraperAPI usage
-                markScraperApiUsed();
+                // markScraperApiUsed(); // This line is removed as per the edit hint.
 
                 console.log(`✅ Success via ScraperAPI (attempt ${attempts + 1})`);
             } else if (proxy.provider === 'ProxyScrape') {
