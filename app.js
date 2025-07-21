@@ -555,13 +555,9 @@ refreshModeRadios.forEach(radio => {
 });
 
 function updateApplyBtnState() {
-    if (!countrySelect.value) {
-        applyBtn.disabled = true;
-        applyStatus.innerText = 'Please select a country to continue';
-    } else {
-        applyBtn.disabled = false;
-        applyStatus.innerText = '';
-    }
+    // Allow 'Any' (blank value) as a valid selection
+    applyBtn.disabled = false;
+    applyStatus.innerText = '';
 }
 countrySelect.addEventListener('change', updateApplyBtnState);
 window.addEventListener('DOMContentLoaded', updateApplyBtnState);
@@ -598,7 +594,11 @@ async function checkProxyStatusAndShowLinks() {
                 singleLinkSection.style.display = 'none';
                 multiLinkSection.style.display = '';
             }
-            document.getElementById('applyStatus').innerText = 'Proxy is active. You can now enter links.';
+            if (selectedCountry === '' && data.actualCountry) {
+                document.getElementById('applyStatus').innerText = 'Proxy is active. Using country: ' + data.actualCountry;
+            } else {
+                document.getElementById('applyStatus').innerText = 'Proxy is active. You can now enter links.';
+            }
         } else {
             singleLinkSection.style.display = 'none';
             multiLinkSection.style.display = 'none';
