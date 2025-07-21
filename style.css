@@ -665,3 +665,51 @@ body.dark {
     max-width: 728px;
     text-align: center;
 }
+
+.tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+    margin: 2rem 0 1rem 0;
+}
+
+.tool-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px #1976d233;
+    padding: 1.2rem;
+    margin: 1.2rem auto;
+    max-width: 400px;
+    min-width: 260px;
+    text-align: left;
+}
+
+.tool-card h2 {
+    margin-top: 0;
+}
+
+.tool-card label {
+    display: block;
+    margin: 0.5rem 0;
+}
+
+.tool-card input {
+    margin-left: 0.5rem;
+}
+
+.tool-card button {
+    margin-top: 0.5rem;
+}
+
+@media (max-width: 700px) {
+    .tools {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .tool-card {
+        max-width: 98vw;
+        min-width: 0;
+    }
+}

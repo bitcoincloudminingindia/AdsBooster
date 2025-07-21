@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Adult Traffic Geo Estimator | AdsBooster</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description"
+        content="Adult Traffic Geo Estimator – Demo tool to estimate best countries for adult ad traffic. Free by AdsBooster.">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #222;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 3rem auto;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px #1976d233;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        h1 {
+            color: #d22;
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin: 1rem 0 0.5rem 0;
+            font-weight: 500;
+        }
+
+        select {
+            padding: 0.5rem;
+            border: 1.5px solid #d22;
+            border-radius: 6px;
+            width: 80%;
+            font-size: 1rem;
+        }
+
+        button {
+            margin-top: 1.2rem;
+            padding: 0.6rem 2rem;
+            background: #d22;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .result {
+            margin-top: 1.5rem;
+            font-size: 1.1rem;
+            color: #d22;
+            font-weight: 600;
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 2rem;
+            color: #1976d2;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .note {
+            font-size: 0.95rem;
+            color: #888;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Adult Traffic Geo Estimator</h1>
+        <label for="volume">Select Traffic Volume</label>
+        <select id="volume">
+            <option value="low">Low (10K-50K)</option>
+            <option value="medium">Medium (50K-500K)</option>
+            <option value="high">High (500K+)</option>
+        </select>
+        <button onclick="estimateGeo()">Estimate</button>
+        <div class="result" id="geoResult"></div>
+        <div class="note">Demo: This tool simulates top Tier-1 countries for adult ad traffic. For real data, use ad
+            network analytics.</div>
+        <a href="/" class="back-link">← Back to Home</a>
+    </div>
+    <script>
+        function estimateGeo() {
+            var volume = document.getElementById('volume').value;
+            var countries = [
+                'United States', 'United Kingdom', 'Germany', 'France', 'Canada', 'Australia', 'Netherlands', 'Sweden', 'Switzerland', 'Norway'
+            ];
+            var top = [];
+            if (volume === 'low') top = countries.slice(0, 3);
+            else if (volume === 'medium') top = countries.slice(0, 5);
+            else top = countries.slice(0, 7);
+            // Shuffle for demo randomness
+            top = top.sort(() => Math.random() - 0.5);
+            document.getElementById('geoResult').innerText = 'Top Tier-1 Countries: ' + top.join(', ');
+        }
+    </script>
+</body>
+
+</html>

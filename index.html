@@ -157,6 +157,65 @@
             </ul>
             <a href="#get-started" class="cta-btn">Start Boosting Free</a>
         </section>
+        <section class="tools-links" style="text-align:center;margin:2.5rem 0 2rem 0;">
+            <h2 style="color:#1976d2;">Try Our Free Tools</h2>
+            <div style="display:flex;flex-wrap:wrap;gap:1.2rem;justify-content:center;">
+                <a class="tool-link-btn" href="/ad-revenue-calculator.html">Ad Revenue Calculator</a>
+                <a class="tool-link-btn" href="/ctr-analyzer.html">CTR Analyzer</a>
+                <a class="tool-link-btn" href="/cpm-optimizer.html">CPM Optimizer</a>
+                <a class="tool-link-btn" href="/impression-booster.html">Impression Booster Simulator</a>
+                <a class="tool-link-btn" href="/adult-ad-checker.html">Adult Ad Compliance Checker</a>
+                <a class="tool-link-btn" href="/adult-geo-estimator.html">Adult Traffic Geo Estimator</a>
+            </div>
+        </section>
+        <section class="tools">
+            <div class="tool-card">
+                <h2>Ad Revenue Calculator</h2>
+                <label>Impressions: <input type="number" id="impressions" value="10000"></label>
+                <label>CPM ($): <input type="number" id="cpm" value="2"></label>
+                <button onclick="calcRevenue()">Calculate</button>
+                <div id="revenueResult"></div>
+            </div>
+            <div class="tool-card">
+                <h2>Click-through Rate Analyzer</h2>
+                <label>Clicks: <input type="number" id="clicks" value="100"></label>
+                <label>Impressions: <input type="number" id="ctrImpressions" value="10000"></label>
+                <button onclick="calcCTR()">Analyze</button>
+                <div id="ctrResult"></div>
+            </div>
+            <div class="tool-card">
+                <h2>CPM Optimizer</h2>
+                <label>Current CPM ($): <input type="number" id="currentCPM" value="2"></label>
+                <label>Target CPM ($): <input type="number" id="targetCPM" value="3"></label>
+                <label>Impressions: <input type="number" id="cpmImpressions" value="10000"></label>
+                <button onclick="calcCPMBoost()">Optimize</button>
+                <div id="cpmResult"></div>
+            </div>
+        </section>
+        <footer style="text-align:center;margin:2rem 0 1rem 0;font-size:0.98rem;">
+            <a href="/privacy-policy.html" target="_blank">Privacy Policy</a>
+        </footer>
+        <script>
+            function calcRevenue() {
+                var impressions = Number(document.getElementById('impressions').value);
+                var cpm = Number(document.getElementById('cpm').value);
+                var revenue = (impressions / 1000) * cpm;
+                document.getElementById('revenueResult').innerText = 'Estimated Revenue: $' + revenue.toFixed(2);
+            }
+            function calcCTR() {
+                var clicks = Number(document.getElementById('clicks').value);
+                var impressions = Number(document.getElementById('ctrImpressions').value);
+                var ctr = (clicks / impressions) * 100;
+                document.getElementById('ctrResult').innerText = 'CTR: ' + ctr.toFixed(2) + '%';
+            }
+            function calcCPMBoost() {
+                var current = Number(document.getElementById('currentCPM').value);
+                var target = Number(document.getElementById('targetCPM').value);
+                var impressions = Number(document.getElementById('cpmImpressions').value);
+                var extra = ((target - current) * impressions) / 1000;
+                document.getElementById('cpmResult').innerText = 'Extra Revenue if CPM meets target: $' + extra.toFixed(2);
+            }
+        </script>
     </main>
     <!-- Popup Guide -->
     <div id="popupGuide" class="modal">
@@ -204,6 +263,12 @@
     <!-- Adsterra Social Bar -->
     <script type='text/javascript'
         src='https://resteddiabetepocket.com/27/ae/22/27ae22e42040d85d48ac18bf38f94713.js'></script>
+    <!-- ExoClick Desktop Fullpage Interstitial -->
+    <script async type="application/javascript" src="https://a.pemsrv.com/ad-provider.js"></script>
+    <ins class="eas6a97888e35" data-zoneid="5680920"></ins>
+    <script>
+        (AdProvider = window.AdProvider || []).push({ "serve": {} });
+    </script>
 </body>
 
 </html>
