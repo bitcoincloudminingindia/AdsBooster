@@ -731,8 +731,48 @@ body.dark {
     justify-content: center;
 }
 
+.tools-links-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+.tool-link-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px #1976d233;
+    padding: 1.5rem 1rem 1.2rem 1rem;
+    text-decoration: none;
+    color: #1976d2;
+    font-size: 1.08rem;
+    font-weight: 500;
+    transition: box-shadow 0.2s, background 0.2s, color 0.2s;
+    min-height: 120px;
+    border: 2px solid #e3f0ff;
+}
+
+.tool-link-card:hover {
+    background: #e3f0ff;
+    color: #1251a3;
+    box-shadow: 0 4px 16px #1976d244;
+    border-color: #1976d2;
+}
+
+.tool-icon {
+    font-size: 2.2rem;
+    margin-bottom: 0.7rem;
+    display: block;
+}
+
 .main-footer {
     text-align: center;
-    margin: 2rem 0 1rem 0;
-    font-size: 0.98rem;
+    margin: 2.5rem 0 1.5rem 0;
+    font-size: 1rem;
+    border-top: 1px solid #e3f0ff;
+    padding-top: 1.2rem;
 }

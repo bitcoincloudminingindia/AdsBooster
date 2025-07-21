@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Adult CPM Estimator | AdsBooster</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description"
+        content="Estimate CPM for adult ad networks by geo and traffic type. Free tool by AdsBooster.">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #222;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 3rem auto;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px #d22a;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        h1 {
+            color: #d22;
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin: 1rem 0 0.5rem 0;
+            font-weight: 500;
+        }
+
+        select,
+        input[type="number"] {
+            padding: 0.5rem;
+            border: 1.5px solid #d22;
+            border-radius: 6px;
+            width: 80%;
+            font-size: 1rem;
+        }
+
+        button {
+            margin-top: 1.2rem;
+            padding: 0.6rem 2rem;
+            background: #d22;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .result {
+            margin-top: 1.5rem;
+            font-size: 1.1rem;
+            color: #d22;
+            font-weight: 600;
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 2rem;
+            color: #1976d2;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Adult CPM Estimator</h1>
+        <label for="geo">Select Country</label>
+        <select id="geo">
+            <option value="US">United States</option>
+            <option value="UK">United Kingdom</option>
+            <option value="DE">Germany</option>
+            <option value="FR">France</option>
+            <option value="IN">India</option>
+            <option value="BR">Brazil</option>
+        </select>
+        <label for="traffic">Traffic Type</label>
+        <select id="traffic">
+            <option value="desktop">Desktop</option>
+            <option value="mobile">Mobile</option>
+        </select>
+        <label for="impressions">Impressions</label>
+        <input type="number" id="impressions" value="10000" min="0">
+        <button onclick="estimateCPM()">Estimate</button>
+        <div class="result" id="cpmResult"></div>
+        <a href="/" class="back-link">← Back to Home</a>
+    </div>
+    <script>
+        function estimateCPM() {
+            var geo = document.getElementById('geo').value;
+            var traffic = document.getElementById('traffic').value;
+            var impressions = Number(document.getElementById('impressions').value);
+            var cpm = 0;
+            // Demo CPM ranges
+            if (geo === 'US' || geo === 'UK') cpm = traffic === 'desktop' ? rand(2, 5) : rand(1.5, 4);
+            else if (geo === 'DE' || geo === 'FR') cpm = traffic === 'desktop' ? rand(1.5, 4) : rand(1, 3);
+            else if (geo === 'IN' || geo === 'BR') cpm = traffic === 'desktop' ? rand(0.5, 1.5) : rand(0.3, 1);
+            var revenue = (impressions / 1000) * cpm;
+            document.getElementById('cpmResult').innerText = 'Estimated CPM: $' + cpm.toFixed(2) + '\nEstimated Revenue: $' + revenue.toFixed(2);
+        }
+        function rand(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+    </script>
+</body>
+
+</html>

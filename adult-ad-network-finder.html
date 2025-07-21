@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Adult Ad Network Finder | AdsBooster</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Find the best adult ad networks for your site type. Free tool by AdsBooster.">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #222;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 3rem auto;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px #d22a;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        h1 {
+            color: #d22;
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin: 1rem 0 0.5rem 0;
+            font-weight: 500;
+        }
+
+        select {
+            padding: 0.5rem;
+            border: 1.5px solid #d22;
+            border-radius: 6px;
+            width: 80%;
+            font-size: 1rem;
+        }
+
+        button {
+            margin-top: 1.2rem;
+            padding: 0.6rem 2rem;
+            background: #d22;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .result {
+            margin-top: 1.5rem;
+            font-size: 1.1rem;
+            color: #d22;
+            font-weight: 600;
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 2rem;
+            color: #1976d2;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Adult Ad Network Finder</h1>
+        <label for="siteType">Select Site Type</label>
+        <select id="siteType">
+            <option value="tube">Tube/Video</option>
+            <option value="cam">Cam Site</option>
+            <option value="dating">Dating</option>
+            <option value="blog">Blog/Review</option>
+            <option value="games">Adult Games</option>
+            <option value="other">Other</option>
+        </select>
+        <button onclick="findNetworks()">Find Networks</button>
+        <div class="result" id="networkResult"></div>
+        <a href="/" class="back-link">← Back to Home</a>
+    </div>
+    <script>
+        function findNetworks() {
+            var type = document.getElementById('siteType').value;
+            var networks = {
+                tube: ['ExoClick', 'TrafficJunky', 'JuicyAds'],
+                cam: ['AdXpansion', 'PlugRush', 'ExoClick'],
+                dating: ['ClickAdu', 'TrafficStars', 'JuicyAds'],
+                blog: ['JuicyAds', 'ExoClick', 'EroAdvertising'],
+                games: ['TrafficJunky', 'ExoClick', 'PlugRush'],
+                other: ['ExoClick', 'JuicyAds', 'TrafficJunky']
+            };
+            var pick = networks[type] || networks.other;
+            // Shuffle for demo randomness
+            pick = pick.sort(() => Math.random() - 0.5);
+            document.getElementById('networkResult').innerText = 'Top Networks: ' + pick.join(', ');
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Adult Keyword Generator | AdsBooster</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Generate high-CTR adult ad keywords for your campaigns. Free tool by AdsBooster.">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #222;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 3rem auto;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px #d22a;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        h1 {
+            color: #d22;
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin: 1rem 0 0.5rem 0;
+            font-weight: 500;
+        }
+
+        select {
+            padding: 0.5rem;
+            border: 1.5px solid #d22;
+            border-radius: 6px;
+            width: 80%;
+            font-size: 1rem;
+        }
+
+        button {
+            margin-top: 1.2rem;
+            padding: 0.6rem 2rem;
+            background: #d22;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .result {
+            margin-top: 1.5rem;
+            font-size: 1.1rem;
+            color: #d22;
+            font-weight: 600;
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 2rem;
+            color: #1976d2;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        ul.keywords {
+            margin: 1rem 0 0 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        ul.keywords li {
+            background: #f5f5f5;
+            color: #d22;
+            border-radius: 6px;
+            margin: 0.2rem 0;
+            padding: 0.3rem 0.7rem;
+            display: inline-block;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Adult Keyword Generator</h1>
+        <label for="cat">Select Category</label>
+        <select id="cat">
+            <option value="dating">Dating</option>
+            <option value="cam">Cam</option>
+            <option value="tube">Tube/Video</option>
+            <option value="games">Games</option>
+            <option value="other">Other</option>
+        </select>
+        <button onclick="generateKeywords()">Generate</button>
+        <div class="result" id="keywordResult"></div>
+        <a href="/" class="back-link">← Back to Home</a>
+    </div>
+    <script>
+        function generateKeywords() {
+            var cat = document.getElementById('cat').value;
+            var keywords = {
+                dating: ['free dating', 'adult dating', 'find singles', 'local hookups', 'mature dating', 'discreet affairs'],
+                cam: ['live cam', 'adult cam', 'webcam girls', 'private show', 'cam chat', 'live xxx cam'],
+                tube: ['free porn', 'hd videos', 'xxx tube', 'adult movies', 'sex videos', 'trending porn'],
+                games: ['adult games', 'sex games', 'virtual dating', 'erotic games', '3d adult game', 'play now'],
+                other: ['adult ads', 'high cpm', 'traffic boost', 'ad network', 'adult traffic', 'monetize adult site']
+            };
+            var pick = keywords[cat] || keywords.other;
+            // Shuffle for demo randomness
+            pick = pick.sort(() => Math.random() - 0.5);
+            var html = '<ul class="keywords">' + pick.map(k => '<li>' + k + '</li>').join('') + '</ul>';
+            document.getElementById('keywordResult').innerHTML = html;
+        }
+    </script>
+</body>
+
+</html>

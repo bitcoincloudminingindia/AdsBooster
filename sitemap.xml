@@ -6,18 +6,58 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://adsbooster.onrender.com/features</loc>
+    <loc>https://adsbooster.onrender.com/ad-revenue-calculator.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://adsbooster.onrender.com/pricing</loc>
+    <loc>https://adsbooster.onrender.com/ctr-analyzer.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://adsbooster.onrender.com/cpm-optimizer.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://adsbooster.onrender.com/impression-booster.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://adsbooster.onrender.com/adult-ad-checker.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://adsbooster.onrender.com/contact</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <loc>https://adsbooster.onrender.com/adult-geo-estimator.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://adsbooster.onrender.com/adult-cpm-estimator.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://adsbooster.onrender.com/adult-ad-network-finder.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://adsbooster.onrender.com/adult-landing-checker.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://adsbooster.onrender.com/adult-keyword-generator.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://adsbooster.onrender.com/privacy-policy.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
   </url>
 </urlset> 
