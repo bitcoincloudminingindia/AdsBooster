@@ -59,7 +59,7 @@ modeRadios.forEach(radio => {
             singleLinkSection.style.display = 'none';
             multiLinkSection.style.display = '';
         }
-        updateGrid();
+        // updateGrid(); // REMOVE: Only update tempState, not grid
     });
 });
 
@@ -129,7 +129,7 @@ function renderIframe(container, url, idx) {
     iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin');
     iframe.setAttribute('loading', idx < 4 ? 'eager' : 'lazy');
     // Backend fetch URL
-    const country = countrySelect.value;
+    const country = getSelectedCountry();
     const rotate = ipRotateToggle.checked ? '1' : '0';
     const backendUrl = `/fetch?url=${encodeURIComponent(url)}&country=${country}&rotate=${rotate}`;
     iframe.src = backendUrl;
@@ -179,8 +179,13 @@ function stopAutoRefresh() {
 refreshIntervalInput.addEventListener('change', () => {
     if (hasAnyLink()) startAutoRefresh();
     else stopAutoRefresh();
+    // Do not call updateGrid here
 });
-ipRotateToggle.addEventListener('change', updateGrid);
+ipRotateToggle.addEventListener('change', () => {
+    tempState.ipRotate = ipRotateToggle.checked;
+    document.getElementById('applyStatus').innerText = 'Changes not applied';
+    // Do not call updateGrid here
+});
 
 function refreshAllIframes() {
     if (!hasAnyLink()) return; // No link, don't refresh
@@ -322,7 +327,7 @@ document.getElementById('applyBtn').onclick = () => {
     // 6. Save links
     saveLinks();
     // 7. Update grid and refresh logic
-    updateGrid();
+    updateGrid(); // ONLY here!
     if (tempState.refreshMode === 'auto') startAutoRefresh();
     else stopAutoRefresh();
     document.getElementById('applyStatus').innerText = 'Changes applied!';
@@ -419,7 +424,7 @@ restrictCountryOptions();
 countrySelect.addEventListener('change', () => {
     localStorage.setItem('adsbooster-country', countrySelect.value);
     if (!checkCountryEligibility()) return;
-    updateGrid();
+    // updateGrid(); // REMOVE: Only update tempState, not grid
 });
 
 // On load, check device and country
@@ -432,7 +437,7 @@ window.onload = () => {
     const savedCountry = localStorage.getItem('adsbooster-country');
     if (savedCountry) countrySelect.value = savedCountry;
     if (!checkCountryEligibility()) return;
-    updateGrid();
+    // Do not call updateGrid here
     // Auto-refresh is now managed by input changes
 };
 gotItBtn.onclick = () => {
@@ -452,6 +457,10 @@ analyticsPanel.innerHTML = `
   <div id="sessionDuration">Session: 0s</div>
 `;
 document.body.appendChild(analyticsPanel);
+// Hide analytics panel after 4 seconds
+setTimeout(() => {
+    analyticsPanel.style.display = 'none';
+}, 4000);
 let sessionId = localStorage.getItem('adsbooster-session') || (Date.now() + '-' + Math.random().toString(36).slice(2));
 localStorage.setItem('adsbooster-session', sessionId);
 let sessionStart = Date.now();

@@ -19,11 +19,23 @@ for (let i = 1; i <= 6; i++) { // Updated to support 6 accounts
     }
 }
 
+// Normalize country code for proxy selection
+function normalizeCountryCode(country) {
+    if (!country) return 'US';
+    if (country.toUpperCase() === 'GB') return 'UK';
+    if (country.toUpperCase() === 'UK') return 'UK';
+    if (country.toUpperCase() === 'US') return 'US';
+    if (country.toUpperCase() === 'FR') return 'FR';
+    if (country.toUpperCase() === 'HR') return 'HR';
+    return 'US'; // fallback
+}
+
 // Merge all proxies for a country from all accounts
 function getAllWebshareProxies(country) {
     const merged = [];
+    const normCountry = normalizeCountryCode(country);
     for (const acc of webshareAccounts) {
-        for (const proxy of acc.proxies[country] || []) {
+        for (const proxy of acc.proxies[normCountry] || []) {
             if (proxy) {
                 merged.push({
                     host: proxy.split(':')[0],
@@ -67,16 +79,18 @@ const userAgents = [
 
 // --- Multi-Account Webshare Proxy Selection ---
 function getWebshareProxy(country) {
-    const allProxies = getAllWebshareProxies(country);
+    const normCountry = normalizeCountryCode(country);
+    const allProxies = getAllWebshareProxies(normCountry);
     if (!allProxies.length) return null;
-    if (indices[country] === undefined) indices[country] = 0;
+    if (indices[normCountry] === undefined) indices[normCountry] = 0;
     let attempts = 0;
     const maxAttempts = allProxies.length;
     while (attempts < maxAttempts) {
-        const proxyObj = allProxies[indices[country]];
-        indices[country] = (indices[country] + 1) % allProxies.length;
+        const proxyObj = allProxies[indices[normCountry]];
+        indices[normCountry] = (indices[normCountry] + 1) % allProxies.length;
         const proxyKey = `${proxyObj.username}:${proxyObj.password}@${proxyObj.host}:${proxyObj.port}`;
         if (!failedProxies.has(proxyKey)) {
+            console.log(`[ProxyPool] Selected proxy for ${normCountry}: ${proxyKey}`);
             return {
                 axiosConfig: {
                     host: proxyObj.host,
@@ -94,7 +108,7 @@ function getWebshareProxy(country) {
                     'Cache-Control': 'max-age=0'
                 },
                 type: 'residential',
-                country: country || 'ANY',
+                country: normCountry || 'ANY',
                 sessionId: `session_${Date.now()}`,
                 provider: 'Webshare.io',
                 proxyKey
@@ -104,7 +118,7 @@ function getWebshareProxy(country) {
     }
     // All proxies failed, reset
     failedProxies.clear();
-    indices[country] = 0;
+    indices[normCountry] = 0;
     return null;
 }
 
@@ -157,8 +171,9 @@ let lastUsedProxyInfo = null;
 
 // --- Main getProxy function (triple provider, multi-account) ---
 function getProxy({ country, city, session }) {
+    const normCountry = normalizeCountryCode(country);
     // 1. Try Webshare.io (multi-account)
-    const webshareProxy = getWebshareProxy(country);
+    const webshareProxy = getWebshareProxy(normCountry);
     if (webshareProxy) {
         lastUsedProxyInfo = {
             ip: webshareProxy.axiosConfig?.host,
