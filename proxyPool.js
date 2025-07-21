@@ -242,7 +242,8 @@ function getProviderStatus() {
             active: allProxies.length > 0,
             percentage: allProxies.length ? Math.round(((allProxies.length - Array.from(failedProxies).length) / allProxies.length) * 100) : 0,
             failed: Array.from(failedProxies).length,
-            total: allProxies.length
+            total: allProxies.length,
+            country // <-- add country property
         });
     }
     // ProxyScrape
@@ -255,7 +256,8 @@ function getProviderStatus() {
         active: proxyScrapeConfig.active && proxyScrapeConfig.used < proxyScrapeConfig.monthlyLimit,
         percentage: Math.round((proxyScrapeConfig.used / proxyScrapeConfig.monthlyLimit) * 100),
         failed: 0,
-        total: proxyScrapeConfig.monthlyLimit
+        total: proxyScrapeConfig.monthlyLimit,
+        country: 'ANY' // add country property
     });
     // ScraperAPI
     status.push({
@@ -267,7 +269,8 @@ function getProviderStatus() {
         active: scraperApiConfig.active && scraperApiConfig.used < scraperApiConfig.monthlyLimit,
         percentage: Math.round((scraperApiConfig.used / scraperApiConfig.monthlyLimit) * 100),
         failed: 0,
-        total: scraperApiConfig.monthlyLimit
+        total: scraperApiConfig.monthlyLimit,
+        country: 'ANY' // add country property
     });
     return status;
 }
