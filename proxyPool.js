@@ -176,6 +176,7 @@ function getProxy({ country, city, session }) {
     if (!country || country === '' || normCountry === 'US') {
         const scraperProxy = getScraperApiProxy('US');
         if (scraperProxy) {
+            markScraperApiUsed();
             lastUsedProxyInfo = {
                 ip: null,
                 port: null,
@@ -214,6 +215,7 @@ function getProxy({ country, city, session }) {
     if (country && country !== '' && normCountry !== 'US') {
         const scraperProxy = getScraperApiProxy(normCountry);
         if (scraperProxy) {
+            markScraperApiUsed();
             lastUsedProxyInfo = {
                 ip: null,
                 port: null,
