@@ -609,4 +609,9 @@ async function checkProxyStatusAndShowLinks() {
         multiLinkSection.style.display = 'none';
         document.getElementById('applyStatus').innerText = 'Error checking proxy status: ' + err.message;
     }
+}
+
+// Helper to get the selected country code from the dropdown
+function getSelectedCountry() {
+    return countrySelect.value;
 } 
