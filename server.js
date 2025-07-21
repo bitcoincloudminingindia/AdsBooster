@@ -198,22 +198,19 @@ app.get('/test-link', async (req, res) => {
     const { url, country } = req.query;
     if (!url) return res.status(400).json({ error: 'Missing url param' });
     try {
-        const proxyObj = getProxy({ country });
-        if (!proxyObj) return res.status(502).json({ error: 'No proxy available for country: ' + country });
+        const proxy = getProxy({ country });
+        if (!proxy) return res.status(502).json({ error: 'No proxy available for country: ' + country });
         const axiosConfig = {
-            proxy: proxyObj.axiosConfig,
-            headers: proxyObj.headers,
+            proxy: proxy.axiosConfig,
+            headers: proxy.headers,
             timeout: 7000,
             validateStatus: () => true,
         };
         const response = await require('axios').get(url, axiosConfig);
         if (response.status === 200) {
-            if (!country || country === '') {
-                console.log(`[Proxy] 'Any' selected, using country: ${proxyObj.selectedCountry}, IP: ${proxyObj.axiosConfig?.host}`);
-            }
-            res.json({ success: true, status: response.status, actualCountry: proxyObj.selectedCountry });
+            res.json({ success: true, status: response.status });
         } else {
-            res.status(400).json({ success: false, status: response.status, error: 'Non-200 status', actualCountry: proxyObj.selectedCountry });
+            res.status(400).json({ success: false, status: response.status, error: 'Non-200 status' });
         }
     } catch (err) {
         res.status(500).json({ success: false, error: err.message });
@@ -228,8 +225,7 @@ app.get('/proxy-status', (req, res) => {
             providers: status,
             totalProviders: status.length,
             activeProviders: status.filter(p => p.active).length,
-            lastUsedProxy: lastUsedProxyInfo,
-            actualCountry: lastUsedProxyInfo ? lastUsedProxyInfo.country : null
+            lastUsedProxy: lastUsedProxyInfo
         });
     } catch (err) {
         res.status(500).json({ error: 'Failed to get proxy status', details: err.message });

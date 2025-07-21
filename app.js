@@ -594,11 +594,7 @@ async function checkProxyStatusAndShowLinks() {
                 singleLinkSection.style.display = 'none';
                 multiLinkSection.style.display = '';
             }
-            if (selectedCountry === '' && data.actualCountry) {
-                document.getElementById('applyStatus').innerText = 'Proxy is active. Using country: ' + data.actualCountry;
-            } else {
-                document.getElementById('applyStatus').innerText = 'Proxy is active. You can now enter links.';
-            }
+            document.getElementById('applyStatus').innerText = 'Proxy is active. You can now enter links.';
         } else {
             singleLinkSection.style.display = 'none';
             multiLinkSection.style.display = 'none';

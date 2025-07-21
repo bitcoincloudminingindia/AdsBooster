@@ -180,10 +180,10 @@ function getProxy({ country, city, session }) {
                 ip: null,
                 port: null,
                 provider: scraperProxy.provider,
-                country: 'US',
+                country: scraperProxy.country,
                 type: scraperProxy.type
             };
-            return { ...scraperProxy, selectedCountry: 'US' };
+            return scraperProxy;
         }
     }
     // 1. Try Webshare.io (multi-account)
@@ -196,7 +196,7 @@ function getProxy({ country, city, session }) {
             country: webshareProxy.country,
             type: webshareProxy.type
         };
-        return { ...webshareProxy, selectedCountry: normCountry };
+        return webshareProxy;
     }
     // 2. Try ProxyScrape
     const proxyScrapeProxy = getProxyScrapeProxy(normCountry);
@@ -208,7 +208,7 @@ function getProxy({ country, city, session }) {
             country: proxyScrapeProxy.country,
             type: proxyScrapeProxy.type
         };
-        return { ...proxyScrapeProxy, selectedCountry: normCountry };
+        return proxyScrapeProxy;
     }
     // 3. Try ScraperAPI (for specific country)
     if (country && country !== '' && normCountry !== 'US') {
@@ -221,7 +221,7 @@ function getProxy({ country, city, session }) {
                 country: scraperProxy.country,
                 type: scraperProxy.type
             };
-            return { ...scraperProxy, selectedCountry: normCountry };
+            return scraperProxy;
         }
     }
     // None available
