@@ -713,3 +713,26 @@ body.dark {
         min-width: 0;
     }
 }
+
+.tools-links {
+    text-align: center;
+    margin: 2.5rem 0 2rem 0;
+}
+
+.tools-links h2 {
+    color: #1976d2;
+    margin-bottom: 1.2rem;
+}
+
+.tools-links-btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.2rem;
+    justify-content: center;
+}
+
+.main-footer {
+    text-align: center;
+    margin: 2rem 0 1rem 0;
+    font-size: 0.98rem;
+}
