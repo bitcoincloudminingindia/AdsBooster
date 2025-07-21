@@ -412,7 +412,7 @@ prequalSkipBtn.onclick = () => {
 };
 
 // --- Location & Device Targeting ---
-const highCpmCountries = ['US', 'UK', 'CA', 'AU'];
+const highCpmCountries = ['US', 'UK', 'CA', 'AU', 'FR', 'HR'];
 function isHighCpmCountry(code) {
     return highCpmCountries.includes(code);
 }
