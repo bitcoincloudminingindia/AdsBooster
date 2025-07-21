@@ -8,6 +8,7 @@ console.log('MONGO_URI:', process.env.MONGO_URI);
 const path = require('path');
 
 const app = express();
+// Serve static files from the root directory
 app.use(express.static(__dirname));
 const PORT = process.env.PORT || 3001;
 
