@@ -586,10 +586,19 @@ multiLinkSection.style.display = 'none';
 async function checkProxyStatusAndShowLinks() {
     try {
         const response = await fetch('/proxy-status');
+        const contentType = response.headers.get('content-type') || '';
+        if (!contentType.includes('application/json')) {
+            const text = await response.text();
+            console.error('Non-JSON response from /proxy-status:', text);
+            singleLinkSection.style.display = 'none';
+            multiLinkSection.style.display = 'none';
+            document.getElementById('applyStatus').innerText = 'Error: Unexpected response from server.';
+            return;
+        }
         const data = await response.json();
         // Find the selected country in the proxy list
         const selectedCountry = getSelectedCountry();
-        const activeProvider = data.providers.find(p => p.country === selectedCountry && p.active);
+        const activeProvider = data.providers && data.providers.find(p => p.country === selectedCountry && p.active);
         if (activeProvider) {
             // Proxy for selected country is active, show link input
             if (mode === 'single') {
