@@ -167,7 +167,7 @@ function renderIframe(container, url, idx) {
     // Backend fetch URL
     const country = getSelectedCountry();
     const rotate = ipRotateToggle.checked ? '1' : '0';
-    const backendUrl = `/fetch?url=${encodeURIComponent(url)}&country=${country}&rotate=${rotate}`;
+    const backendUrl = `/proxy-status/fetch?url=${encodeURIComponent(url)}&country=${country}&rotate=${rotate}`;
     iframe.src = backendUrl;
     iframe.onload = () => {
         hidePlaceholder(container);
