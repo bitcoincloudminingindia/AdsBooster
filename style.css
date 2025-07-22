@@ -1055,6 +1055,11 @@ body.dark {
     }
 }
 
+.nav-logo-img {
+    height: 32px;
+    vertical-align: middle;
+}
+
 .thumbnail-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -1084,4 +1089,16 @@ body.dark {
 .thumbnail-card p {
     font-weight: 500;
     margin-bottom: 0.5rem;
+}
+
+/* All Tools Section Styles */
+.all-tools-container {
+    margin-top: 2rem;
+}
+
+.all-tools-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
 }
