@@ -97,7 +97,7 @@ app.use((err, req, res, next) => {
 // MongoDB connection
 const MONGO_URI = process.env.MONGO_URI;
 let db;
-MongoClient.connect(MONGO_URI, { useUnifiedTopology: true })
+MongoClient.connect(MONGO_URI)
     .then(client => {
         db = client.db('adsbooster');
         console.log('MongoDB connected!');
