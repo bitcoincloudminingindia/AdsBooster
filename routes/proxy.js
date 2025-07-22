@@ -36,6 +36,20 @@ router.get('/test-link', async (req, res) => {
     return res.json({ success: true });
 });
 
+// Add /fetch endpoint for iframe proxying
+router.get('/fetch', async (req, res) => {
+    const url = req.query.url;
+    if (!url) return res.status(400).send('URL required');
+    try {
+        const response = await fetch(url);
+        if (!response.ok) return res.status(response.status).send('Failed to fetch');
+        res.setHeader('Content-Type', response.headers.get('content-type') || 'text/html');
+        response.body.pipe(res);
+    } catch (err) {
+        res.status(500).send('Proxy fetch error');
+    }
+});
+
 // Image proxy for downloading/displaying content
 router.get('/image', async (req, res) => {
     try {
