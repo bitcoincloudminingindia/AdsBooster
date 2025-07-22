@@ -35,15 +35,25 @@ router.get('/test-link', async (req, res) => {
     }
 
     try {
-        // Proxy ke through request bhejo
-        await axios.get(url, {
-            proxy: {
-                host: proxy.axiosConfig.host,
-                port: proxy.axiosConfig.port,
-                auth: proxy.axiosConfig.auth
-            },
-            timeout: 7000
-        });
+        if (proxy.provider === 'ScraperAPI' && proxy.scraperApiUrl) {
+            // ScraperAPI ke liye direct URL par request bhejein
+            await axios.get(proxy.scraperApiUrl + encodeURIComponent(url), {
+                headers: proxy.headers,
+                timeout: 7000
+            });
+        } else if (proxy.axiosConfig) {
+            // Normal HTTP proxy ke liye
+            await axios.get(url, {
+                proxy: {
+                    host: proxy.axiosConfig.host,
+                    port: proxy.axiosConfig.port,
+                    auth: proxy.axiosConfig.auth
+                },
+                timeout: 7000
+            });
+        } else {
+            return res.json({ success: false, error: 'Invalid proxy config' });
+        }
         return res.json({ success: true });
     } catch (err) {
         console.error('Proxy test failed:', err.message);
