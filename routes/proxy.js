@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getProviderStatus } = require('../proxyPool');
+const { getProviderStatus, getProxy } = require('../proxyPool'); // Import getProxy
 const logger = require('../logger');
 const fetch = require('node-fetch');
 
@@ -14,6 +14,26 @@ router.get('/', (req, res) => {
         logger.error('Error in /proxy-status', err);
         res.status(500).json({ error: 'Proxy status error', details: err.message });
     }
+});
+
+// Add /test-link endpoint
+router.get('/test-link', async (req, res) => {
+    const url = req.query.url;
+    const country = req.query.country;
+    console.log('Frontend se aayi country:', country); // Logging for debug
+
+    if (!url || !country) {
+        return res.json({ success: false, error: 'Missing url or country' });
+    }
+
+    // Proxy selection logic (dummy for now)
+    const proxy = getProxy({ country });
+    if (!proxy) {
+        return res.json({ success: false, error: 'No proxy available for this country' });
+    }
+
+    // TODO: Proxy ke through url ko test karo (abhi dummy response)
+    return res.json({ success: true });
 });
 
 // Image proxy for downloading/displaying content
