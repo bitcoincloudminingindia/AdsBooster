@@ -5,7 +5,7 @@ const crypto = require('crypto');
 const fs = require('fs');
 const logger = require('../logger');
 const router = express.Router();
-const { db } = require('../server');
+const { db, connectDB } = require('../db');
 
 // Allowed file types (images and pdf)
 const ALLOWED_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.gif', '.pdf'];
@@ -42,6 +42,7 @@ const upload = multer({
 
 // Store file metadata in MongoDB
 async function saveFileLink(token, filePath, originalName, expiresAt) {
+    const db = await connectDB();
     await db.collection('fileLinks').insertOne({ token, filePath, originalName, expiresAt });
 }
 async function getFileLink(token) {

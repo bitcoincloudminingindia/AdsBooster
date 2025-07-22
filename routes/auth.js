@@ -3,15 +3,47 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const router = express.Router();
 require('dotenv').config();
+const { connectDB } = require('../db');
 
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: process.env.GOOGLE_CALLBACK_URL
 },
-    function (accessToken, refreshToken, profile, done) {
-        // In production, save/find user in DB here
-        return done(null, profile);
+    async function (accessToken, refreshToken, profile, done) {
+        try {
+            const db = await connectDB();
+            const users = db.collection('users');
+            // Google id से user find करो
+            let user = await users.findOne({ googleId: profile.id });
+            if (!user) {
+                // नया user insert करो
+                user = {
+                    googleId: profile.id,
+                    displayName: profile.displayName,
+                    email: profile.emails && profile.emails[0] ? profile.emails[0].value : null,
+                    photo: profile.photos && profile.photos[0] ? profile.photos[0].value : null,
+                    createdAt: new Date()
+                };
+                await users.insertOne(user);
+            } else {
+                // Existing user का data update करो
+                await users.updateOne(
+                    { googleId: profile.id },
+                    {
+                        $set: {
+                            displayName: profile.displayName,
+                            email: profile.emails && profile.emails[0] ? profile.emails[0].value : null,
+                            photo: profile.photos && profile.photos[0] ? profile.photos[0].value : null,
+                            lastLogin: new Date()
+                        }
+                    }
+                );
+            }
+            return done(null, user);
+        } catch (err) {
+            return done(err);
+        }
     }
 ));
 

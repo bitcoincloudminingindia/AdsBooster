@@ -8,6 +8,8 @@ const session = require('express-session');
 const passport = require('passport');
 const logger = require('./logger');
 const csurf = require('csurf');
+const MongoStore = require('connect-mongo');
+const { connectDB } = require('./db');
 
 const app = express();
 
@@ -47,14 +49,8 @@ app.use(express.json());
 // NOTE: In production, use a scalable session store like connect-mongo or connect-redis
 // Example (uncomment and configure as needed):
 // const MongoStore = require('connect-mongo');
-// app.use(session({
-//   store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
-//   secret: process.env.SESSION_SECRET,
-//   resave: false,
-//   saveUninitialized: false,
-//   cookie: { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', maxAge: 2 * 60 * 60 * 1000 }
-// }));
 app.use(session({
+    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
     secret: process.env.SESSION_SECRET || 'your_secret',
     resave: false,
     saveUninitialized: false,
@@ -97,13 +93,7 @@ app.use((err, req, res, next) => {
 // MongoDB connection
 const MONGO_URI = process.env.MONGO_URI;
 let db;
-MongoClient.connect(MONGO_URI)
-    .then(client => {
-        db = client.db('adsbooster');
-        console.log('MongoDB connected!');
-        module.exports.db = db;
-    })
-    .catch(err => console.error('MongoDB connection error:', err));
+// connectDB(); // This line is removed as per the edit hint.
 
 // Rate limiting
 app.use(rateLimit({ windowMs: 60 * 1000, max: 60 }));
