@@ -1094,11 +1094,115 @@ body.dark {
 /* All Tools Section Styles */
 .all-tools-container {
     margin-top: 2rem;
+    background: #fff;
+    border-radius: 1.2rem;
+    box-shadow: 0 2px 16px 0 rgba(25, 118, 210, 0.08);
+    padding: 2rem 1.5rem;
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.all-tools-container h2 {
+    text-align: center;
+    color: #1976d2;
+    font-size: 1.6rem;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
 }
 
 .all-tools-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 18px;
     justify-content: center;
+    padding: 0.5rem 0;
+}
+
+.tool-card-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background: #f8fafc;
+    border-radius: 1rem;
+    box-shadow: 0 2px 8px #1976d233;
+    padding: 1.2rem 1.5rem 1.1rem 1.5rem;
+    font-size: 1.08rem;
+    font-weight: 600;
+    color: #1976d2;
+    text-decoration: none;
+    border: 2px solid #e3f0ff;
+    transition: box-shadow 0.2s, background 0.2s, color 0.2s, border 0.2s;
+    min-width: 200px;
+    max-width: 240px;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    position: relative;
+}
+
+.tool-card-link:hover {
+    background: #1976d2;
+    color: #fff;
+    box-shadow: 0 4px 18px 0 rgba(25, 118, 210, 0.13);
+    border-color: #1976d2;
+}
+
+.tool-icon {
+    font-size: 2.1rem;
+    margin-bottom: 0.6rem;
+    display: block;
+}
+
+.tool-title {
+    font-size: 1.08rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+    text-align: center;
+}
+
+.tool-desc {
+    font-size: 0.98rem;
+    font-weight: 400;
+    color: #555;
+    text-align: center;
+    margin-bottom: 0;
+}
+
+.tool-card-link:hover .tool-desc {
+    color: #e3f0ff;
+}
+
+@media (max-width: 700px) {
+    .all-tools-container {
+        padding: 1rem 0.3rem;
+        border-radius: 0.7rem;
+    }
+
+    .all-tools-list {
+        gap: 10px;
+        padding: 0.2rem 0;
+    }
+
+    .tool-card-link {
+        min-width: 120px;
+        max-width: 98vw;
+        font-size: 0.98rem;
+        padding: 0.7rem 0.7rem;
+    }
+
+    .tool-title {
+        font-size: 1rem;
+    }
+
+    .tool-icon {
+        font-size: 1.5rem;
+    }
+}
+
+.ip-country-result {
+    text-align: center;
+    margin: 1rem 0;
+    font-weight: bold;
 }

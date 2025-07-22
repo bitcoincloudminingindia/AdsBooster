@@ -13,6 +13,9 @@ const { connectDB } = require('./db');
 
 const app = express();
 
+// Trust proxy for correct IP detection behind proxies
+app.set('trust proxy', 1);
+
 // Helmet for HTTP security headers
 app.use(helmet());
 
@@ -109,6 +112,17 @@ app.use('/api/auth', require('./routes/auth'));
 const stocksRouter = require('./routes/stocks');
 app.use('/api/stocks', stocksRouter);
 app.use('/proxy-status', require('./routes/proxy'));
+
+// Add after all other routes
+const geoip = require('geoip-lite');
+app.post('/api/show-ip-country', (req, res) => {
+    const ip = req.headers['x-forwarded-for']?.split(',')[0] || req.connection.remoteAddress;
+    const geo = geoip.lookup(ip);
+    res.json({
+        ip,
+        country: geo?.country || 'Unknown'
+    });
+});
 
 // DO NOT serve uploads/ statically in production. Only allow access via secure download route in routes/file.js
 if (process.env.NODE_ENV !== 'production') {

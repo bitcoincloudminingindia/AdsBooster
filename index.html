@@ -117,6 +117,7 @@
             <button id="endTaskBtn" class="end-task-btn">End Task</button>
             <span id="applyStatus" class="apply-status"></span>
         </div>
+        <div id="ipCountryResult" class="ip-country-result"></div>
         <section class="ad-links single-link-section">
             <input type="url" id="singleLinkInput" placeholder="Paste ad link or website URL...">
         </section>
@@ -384,6 +385,20 @@
         </div>
     </div>
     <script src="app.js"></script>
+    <script>
+        document.getElementById('applyBtn').addEventListener('click', function () {
+            fetch('/api/show-ip-country', { method: 'POST' })
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('ipCountryResult').innerText =
+                        `Connected IP: ${data.ip} | Country: ${data.country}`;
+                })
+                .catch(() => {
+                    document.getElementById('ipCountryResult').innerText =
+                        'Could not fetch your IP and country.';
+                });
+        });
+    </script>
     <!-- Adsterra Social Bar -->
     <script type='text/javascript'
         src='https://resteddiabetepocket.com/27/ae/22/27ae22e42040d85d48ac18bf38f94713.js'></script>
