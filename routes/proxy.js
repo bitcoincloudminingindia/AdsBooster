@@ -4,7 +4,8 @@ const { getProviderStatus } = require('../proxyPool');
 const logger = require('../logger');
 const fetch = require('node-fetch');
 
-router.get('/proxy-status', (req, res) => {
+// Change route from '/proxy-status' to '/'
+router.get('/', (req, res) => {
     try {
         // If you add query params in the future, use express-validator here for validation.
         const status = getProviderStatus();
