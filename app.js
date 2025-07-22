@@ -82,7 +82,7 @@ function saveLinks() {
 // Helper to test if a link is accessible from the selected country/proxy
 async function testLinkWithProxy(url, country) {
     try {
-        const response = await fetch(`/test-link?url=${encodeURIComponent(url)}&country=${country}`);
+        const response = await fetch(`/proxy-status/test-link?url=${encodeURIComponent(url)}&country=${country}`);
         const data = await response.json();
         return data.success === true;
     } catch (err) {
