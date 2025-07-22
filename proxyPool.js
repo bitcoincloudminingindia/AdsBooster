@@ -49,6 +49,12 @@ function getAllWebshareProxies(country) {
     return merged;
 }
 
+// After loading webshareAccounts, log loaded proxies for each country
+['US', 'UK', 'FR', 'HR'].forEach(country => {
+    const proxies = getAllWebshareProxies(country);
+    console.log(`[ProxyPool] Loaded proxies for ${country}:`, proxies.length, proxies.map(p => `${p.host}:${p.port}`));
+});
+
 // --- Existing ProxyScrape & ScraperAPI Configs (unchanged) ---
 const scraperApiConfig = {
     apiKey: process.env.SCRAPERAPI_KEY,
