@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grammar & Spelling Checker | AdsBooster Tools</title>
+    <meta name="description"
+        content="Free Grammar & Spelling Checker: Instantly correct your text with AI. Real-time suggestions, explanations, and copy/download options.">
+    <meta name="keywords"
+        content="Grammar Checker, Spelling Checker, AI Grammar, Free Grammar Tool, Online Spelling, Text Correction, AI Tools">
+    <meta property="og:title" content="Grammar & Spelling Checker | AdsBooster Tools">
+    <meta property="og:description"
+        content="Instantly correct your text with AI. Real-time grammar and spelling suggestions. Free and easy to use.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://adsbooster.onrender.com/grammar-spelling-checker.html">
+    <meta property="og:image" content="https://adsbooster.onrender.com/App%20Icon.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Grammar & Spelling Checker | AdsBooster Tools">
+    <meta name="twitter:description"
+        content="Instantly correct your text with AI. Real-time grammar and spelling suggestions. Free and easy to use.">
+    <meta name="twitter:image" content="https://adsbooster.onrender.com/App%20Icon.png">
+    <link rel="canonical" href="https://adsbooster.onrender.com/grammar-spelling-checker.html">
+    <meta name="robots" content="index, follow">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .gs-form {
+            max-width: 500px;
+            margin: 2rem auto;
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 8px #0001;
+        }
+
+        .gs-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .gs-form textarea {
+            width: 100%;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border-radius: 0.4rem;
+            border: 1px solid #ccc;
+        }
+
+        .gs-result {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 0.7rem;
+            margin-top: 1rem;
+            min-height: 60px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="App Icon.png" alt="AdsBooster Logo" class="app-logo small-logo">
+        <h1 class="header-title">Grammar & Spelling Checker</h1>
+        <a href="index.html" class="cta-btn">⬅ Back to Dashboard</a>
+    </header>
+    <main>
+        <section class="tool-section">
+            <h2>Grammar & Spelling Checker</h2>
+            <form class="gs-form" id="gsForm">
+                <label>Enter Text:
+                    <textarea id="gsInput" rows="5" required placeholder="Paste or type your text..."></textarea>
+                </label>
+                <button type="submit" class="cta-btn">Check Grammar</button>
+            </form>
+            <div class="gs-result" id="gsResult"></div>
+        </section>
+    </main>
+    <script>
+        document.getElementById('gsForm').onsubmit = async function (e) {
+            e.preventDefault();
+            const text = document.getElementById('gsInput').value;
+            document.getElementById('gsResult').textContent = 'Checking...';
+            try {
+                const res = await fetch('http://localhost:5000/api/ai/grammar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text })
+                });
+                const data = await res.json();
+                document.getElementById('gsResult').textContent = data.corrected || '';
+            } catch (err) {
+                document.getElementById('gsResult').textContent = 'Error: ' + err.message;
+            }
+        }
+    </script>
+</body>
+
+</html>

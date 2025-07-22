@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Blog Idea & Title Generator | AdsBooster Tools</title>
+    <meta name="description"
+        content="AI Blog Idea & Title Generator: Enter your niche and get trending, SEO-optimized blog titles. Free, fast, and creative.">
+    <meta name="keywords"
+        content="AI Blog Idea Generator, Blog Title Generator, SEO Blog Ideas, Trending Blog, AI Tools">
+    <meta property="og:title" content="AI Blog Idea & Title Generator | AdsBooster Tools">
+    <meta property="og:description"
+        content="Enter your niche and get trending, SEO-optimized blog titles. Free, fast, and creative.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://adsbooster.onrender.com/ai-blog-idea-title-generator.html">
+    <meta property="og:image" content="https://adsbooster.onrender.com/App%20Icon.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AI Blog Idea & Title Generator | AdsBooster Tools">
+    <meta name="twitter:description"
+        content="Enter your niche and get trending, SEO-optimized blog titles. Free, fast, and creative.">
+    <meta name="twitter:image" content="https://adsbooster.onrender.com/App%20Icon.png">
+    <link rel="canonical" href="https://adsbooster.onrender.com/ai-blog-idea-title-generator.html">
+    <meta name="robots" content="index, follow">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .bi-form {
+            max-width: 500px;
+            margin: 2rem auto;
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 8px #0001;
+        }
+
+        .bi-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .bi-form input {
+            width: 100%;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border-radius: 0.4rem;
+            border: 1px solid #ccc;
+        }
+
+        .bi-result {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 0.7rem;
+            margin-top: 1rem;
+            min-height: 60px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="App Icon.png" alt="AdsBooster Logo" class="app-logo small-logo">
+        <h1 class="header-title">AI Blog Idea & Title Generator</h1>
+        <a href="index.html" class="cta-btn">⬅ Back to Dashboard</a>
+    </header>
+    <main>
+        <section class="tool-section">
+            <h2>AI Blog Idea & Title Generator</h2>
+            <form class="bi-form" id="biForm">
+                <label>Niche/Topic:
+                    <input type="text" id="biInput" required placeholder="e.g. Fitness, Crypto, Marketing">
+                </label>
+                <button type="submit" class="cta-btn">Generate Ideas</button>
+            </form>
+            <div class="bi-result" id="biResult"></div>
+        </section>
+    </main>
+    <script>
+        document.getElementById('biForm').onsubmit = async function (e) {
+            e.preventDefault();
+            const topic = document.getElementById('biInput').value;
+            document.getElementById('biResult').innerHTML = 'Loading...';
+            try {
+                const res = await fetch('http://localhost:5000/api/ai/blog-idea', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ topic })
+                });
+                const data = await res.json();
+                document.getElementById('biResult').innerHTML = `<b>1.</b> ${data.ideas[0] || ''}<br><b>2.</b> ${data.ideas[1] || ''}<br><b>3.</b> ${data.ideas[2] || ''}`;
+            } catch (err) {
+                document.getElementById('biResult').innerHTML = 'Error: ' + err.message;
+            }
+        }
+    </script>
+</body>
+
+</html>

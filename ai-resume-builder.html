@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Resume Builder | AdsBooster Tools</title>
+    <meta name="description"
+        content="AI Resume Builder: Instantly generate 3 ATS-friendly resumes using AI. Download as PDF/Word. Free, fast, and optimized for job seekers.">
+    <meta name="keywords"
+        content="AI Resume Builder, Resume Generator, ATS Resume, Free Resume, Download Resume, Job Application, CV Builder, AI Tools">
+    <meta property="og:title" content="AI Resume Builder | AdsBooster Tools">
+    <meta property="og:description"
+        content="Generate 3 professional, ATS-friendly resumes with AI. Download as PDF/Word. Free and fast.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://adsbooster.onrender.com/ai-resume-builder.html">
+    <meta property="og:image" content="https://adsbooster.onrender.com/App%20Icon.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AI Resume Builder | AdsBooster Tools">
+    <meta name="twitter:description"
+        content="Generate 3 professional, ATS-friendly resumes with AI. Download as PDF/Word. Free and fast.">
+    <meta name="twitter:image" content="https://adsbooster.onrender.com/App%20Icon.png">
+    <link rel="canonical" href="https://adsbooster.onrender.com/ai-resume-builder.html">
+    <meta name="robots" content="index, follow">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .resume-form {
+            max-width: 500px;
+            margin: 2rem auto;
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 8px #0001;
+        }
+
+        .resume-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .resume-form textarea,
+        .resume-form input {
+            width: 100%;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border-radius: 0.4rem;
+            border: 1px solid #ccc;
+        }
+
+        .resume-results {
+            margin-top: 2rem;
+        }
+
+        .resume-card {
+            background: #f8fafc;
+            border-radius: 0.7rem;
+            padding: 1rem;
+            margin-bottom: 1.2rem;
+            box-shadow: 0 1px 4px #0001;
+        }
+
+        .resume-card pre {
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="App Icon.png" alt="AdsBooster Logo" class="app-logo small-logo">
+        <h1 class="header-title">AI Resume Builder</h1>
+        <a href="index.html" class="cta-btn">⬅ Back to Dashboard</a>
+    </header>
+    <main>
+        <section class="tool-section">
+            <h2>AI Resume Builder</h2>
+            <form class="resume-form" id="resumeForm">
+                <label>Career Details (Education, Experience, Skills, etc.)
+                    <textarea id="careerDetails" rows="5" required
+                        placeholder="Describe your education, experience, skills..."></textarea>
+                </label>
+                <button type="submit" class="cta-btn">Generate Resume</button>
+            </form>
+            <div class="resume-results hidden" id="resumeResults">
+                <div class="resume-card">
+                    <h3>Resume 1</h3>
+                    <pre id="resume1">(AI generated resume will appear here)</pre><button>Download PDF</button>
+                    <button>Download Word</button>
+                </div>
+                <div class="resume-card">
+                    <h3>Resume 2</h3>
+                    <pre id="resume2">(AI generated resume will appear here)</pre><button>Download PDF</button>
+                    <button>Download Word</button>
+                </div>
+                <div class="resume-card">
+                    <h3>Resume 3</h3>
+                    <pre id="resume3">(AI generated resume will appear here)</pre><button>Download PDF</button>
+                    <button>Download Word</button>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script>
+        document.getElementById('resumeForm').onsubmit = async function (e) {
+            e.preventDefault();
+            const details = document.getElementById('careerDetails').value;
+            document.getElementById('resume1').textContent = 'Loading...';
+            document.getElementById('resume2').textContent = '';
+            document.getElementById('resume3').textContent = '';
+            document.getElementById('resumeResults').classList.remove('hidden');
+            try {
+                const res = await fetch('http://localhost:5000/api/ai/resume', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ careerDetails: details })
+                });
+                const data = await res.json();
+                document.getElementById('resume1').textContent = data.resumes[0] || '';
+                document.getElementById('resume2').textContent = data.resumes[1] || '';
+                document.getElementById('resume3').textContent = data.resumes[2] || '';
+            } catch (err) {
+                document.getElementById('resume1').textContent = 'Error: ' + err.message;
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personality Quiz Maker | AdsBooster Tools</title>
+    <meta name="description"
+        content="Personality Quiz Maker: Create fun, personalized quizzes with AI. Share results, get instant reports. Free and easy to use.">
+    <meta name="keywords" content="Personality Quiz, Quiz Maker, AI Quiz, Fun Quiz, Shareable Quiz, AI Tools">
+    <meta property="og:title" content="Personality Quiz Maker | AdsBooster Tools">
+    <meta property="og:description"
+        content="Create fun, personalized quizzes with AI. Share results, get instant reports. Free and easy to use.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://adsbooster.onrender.com/personality-quiz-maker.html">
+    <meta property="og:image" content="https://adsbooster.onrender.com/App%20Icon.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Personality Quiz Maker | AdsBooster Tools">
+    <meta name="twitter:description"
+        content="Create fun, personalized quizzes with AI. Share results, get instant reports. Free and easy to use.">
+    <meta name="twitter:image" content="https://adsbooster.onrender.com/App%20Icon.png">
+    <link rel="canonical" href="https://adsbooster.onrender.com/personality-quiz-maker.html">
+    <meta name="robots" content="index, follow">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .quiz-section {
+            max-width: 500px;
+            margin: 2rem auto;
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 8px #0001;
+        }
+
+        .quiz-section button {
+            margin-top: 1rem;
+        }
+
+        .quiz-result {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 0.7rem;
+            margin-top: 1rem;
+            min-height: 60px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="App Icon.png" alt="AdsBooster Logo" class="app-logo small-logo">
+        <h1 class="header-title">Personality Quiz Maker</h1>
+        <a href="index.html" class="cta-btn">⬅ Back to Dashboard</a>
+    </header>
+    <main>
+        <section class="tool-section">
+            <h2>Personality Quiz Maker</h2>
+            <div class="quiz-section" id="quizSection">
+                <button onclick="startQuiz()" class="cta-btn">Start Quiz</button>
+            </div>
+            <div class="quiz-result" id="quizResult"></div>
+        </section>
+    </main>
+    <script>
+        function startQuiz() {
+            document.getElementById('quizSection').innerHTML = `<b>Q1:</b> What describes you best?<br>
+                <button onclick=\"showResult('Introvert')\">Introvert</button>
+                <button onclick=\"showResult('Extrovert')\">Extrovert</button>
+                <button onclick=\"showResult('Ambivert')\">Ambivert</button>`;
+        }
+        function showResult(type) {
+            document.getElementById('quizResult').innerHTML = `<b>Your Personality:</b> ${type}<br>(AI detailed report yahan aayega)`;
+        }
+    </script>
+</body>
+
+</html>

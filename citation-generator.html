@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citation Generator | AdsBooster Tools</title>
+    <meta name="description"
+        content="Free Citation Generator: Instantly create APA, MLA, and Chicago citations from URL or DOI. Copy-ready, fast, and accurate.">
+    <meta name="keywords"
+        content="Citation Generator, APA Citation, MLA Citation, Chicago Citation, Free Citation Tool, AI Tools">
+    <meta property="og:title" content="Citation Generator | AdsBooster Tools">
+    <meta property="og:description"
+        content="Create APA, MLA, and Chicago citations from URL or DOI. Free, fast, and accurate.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://adsbooster.onrender.com/citation-generator.html">
+    <meta property="og:image" content="https://adsbooster.onrender.com/App%20Icon.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Citation Generator | AdsBooster Tools">
+    <meta name="twitter:description"
+        content="Create APA, MLA, and Chicago citations from URL or DOI. Free, fast, and accurate.">
+    <meta name="twitter:image" content="https://adsbooster.onrender.com/App%20Icon.png">
+    <link rel="canonical" href="https://adsbooster.onrender.com/citation-generator.html">
+    <meta name="robots" content="index, follow">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .cit-form {
+            max-width: 500px;
+            margin: 2rem auto;
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 8px #0001;
+        }
+
+        .cit-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .cit-form input {
+            width: 100%;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border-radius: 0.4rem;
+            border: 1px solid #ccc;
+        }
+
+        .cit-result {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 0.7rem;
+            margin-top: 1rem;
+            min-height: 60px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="App Icon.png" alt="AdsBooster Logo" class="app-logo small-logo">
+        <h1 class="header-title">Citation Generator (APA/MLA/Chicago)</h1>
+        <a href="index.html" class="cta-btn">⬅ Back to Dashboard</a>
+    </header>
+    <main>
+        <section class="tool-section">
+            <h2>Citation Generator (APA/MLA/Chicago)</h2>
+            <form class="cit-form" id="citForm">
+                <label>URL or DOI:
+                    <input type="text" id="citInput" required placeholder="Paste URL or DOI here...">
+                </label>
+                <button type="submit" class="cta-btn">Generate Citation</button>
+            </form>
+            <div class="cit-result" id="citResult"></div>
+        </section>
+    </main>
+    <script>
+        document.getElementById('citForm').onsubmit = function (e) {
+            e.preventDefault();
+            const val = document.getElementById('citInput').value;
+            // Yahan par API call ka code aayega (future me)
+            document.getElementById('citResult').innerHTML = `<b>APA:</b> (Citation for ${val})<br><b>MLA:</b> (Citation for ${val})<br><b>Chicago:</b> (Citation for ${val})`;
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Portfolio Tracker | AdsBooster Tools</title>
+    <meta name="description"
+        content="Stock Portfolio Tracker: Add stocks, track real-time prices, gain/loss, and export your portfolio. Free, fast, and easy to use.">
+    <meta name="keywords" content="Stock Portfolio Tracker, Stock Tracker, Real-time Stocks, Portfolio Tool, AI Tools">
+    <meta property="og:title" content="Stock Portfolio Tracker | AdsBooster Tools">
+    <meta property="og:description"
+        content="Add stocks, track real-time prices, gain/loss, and export your portfolio. Free, fast, and easy to use.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://adsbooster.onrender.com/stock-portfolio-tracker.html">
+    <meta property="og:image" content="https://adsbooster.onrender.com/App%20Icon.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Stock Portfolio Tracker | AdsBooster Tools">
+    <meta name="twitter:description"
+        content="Add stocks, track real-time prices, gain/loss, and export your portfolio. Free, fast, and easy to use.">
+    <meta name="twitter:image" content="https://adsbooster.onrender.com/App%20Icon.png">
+    <link rel="canonical" href="https://adsbooster.onrender.com/stock-portfolio-tracker.html">
+    <meta name="robots" content="index, follow">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .sp-form {
+            max-width: 600px;
+            margin: 2rem auto;
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 8px #0001;
+        }
+
+        .sp-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .sp-form input {
+            width: 100%;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border-radius: 0.4rem;
+            border: 1px solid #ccc;
+        }
+
+        .sp-table {
+            margin-top: 1rem;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 0.5rem;
+            text-align: center;
+        }
+
+        th {
+            background: #f0f0f0;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="App Icon.png" alt="AdsBooster Logo" class="app-logo small-logo">
+        <h1 class="header-title">Stock Portfolio Tracker</h1>
+        <a href="index.html" class="cta-btn">⬅ Back to Dashboard</a>
+    </header>
+    <main>
+        <section class="tool-section">
+            <h2>Stock Portfolio Tracker</h2>
+            <form class="sp-form" id="spForm">
+                <label>Stock Symbol:
+                    <input type="text" id="spSymbol" required placeholder="e.g. AAPL, TSLA">
+                </label>
+                <label>Quantity:
+                    <input type="number" id="spQty" required min="1" value="1">
+                </label>
+                <button type="submit" class="cta-btn">Add Stock</button>
+            </form>
+            <table class="sp-table" id="spTable">
+                <tr>
+                    <th>Symbol</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Value</th>
+                </tr>
+            </table>
+        </section>
+    </main>
+    <script>
+        let stocks = [];
+        document.getElementById('spForm').onsubmit = async function (e) {
+            e.preventDefault();
+            const symbol = document.getElementById('spSymbol').value.toUpperCase();
+            const qty = parseInt(document.getElementById('spQty').value);
+            document.getElementById('spResult').innerText = 'Fetching price...';
+            try {
+                const res = await fetch(`/api/stocks/price/${symbol}`);
+                const data = await res.json();
+                if (data.price) {
+                    stocks.push({ symbol, qty, price: data.price });
+                    renderTable();
+                    document.getElementById('spResult').innerText = '';
+                } else {
+                    document.getElementById('spResult').innerText = 'Price not found!';
+                }
+            } catch (err) {
+                document.getElementById('spResult').innerText = 'Error: ' + err.message;
+            }
+        }
+        function renderTable() {
+            let html = '<tr><th>Symbol</th><th>Quantity</th><th>Price</th><th>Value</th></tr>';
+            stocks.forEach(s => {
+                html += `<tr><td>${s.symbol}</td><td>${s.qty}</td><td>$${s.price}</td><td>$${(s.qty * s.price).toFixed(2)}</td></tr>`;
+            });
+            document.getElementById('spTable').innerHTML = html;
+        }
+    </script>
+</body>
+
+</html>

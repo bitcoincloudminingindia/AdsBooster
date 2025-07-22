@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Voice Cloning Tool | AdsBooster Tools</title>
+    <meta name="description"
+        content="AI Voice Cloning Tool: Upload your voice sample and generate audio reading any text in the same voice. Free demo.">
+    <meta name="keywords" content="AI Voice Cloning, Voice Generator, Clone Voice, AI Audio, Free Voice Tool, AI Tools">
+    <meta property="og:title" content="AI Voice Cloning Tool | AdsBooster Tools">
+    <meta property="og:description"
+        content="Upload your voice sample and generate audio reading any text in the same voice. Free demo.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://adsbooster.onrender.com/ai-voice-cloning.html">
+    <meta property="og:image" content="https://adsbooster.onrender.com/App%20Icon.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AI Voice Cloning Tool | AdsBooster Tools">
+    <meta name="twitter:description"
+        content="Upload your voice sample and generate audio reading any text in the same voice. Free demo.">
+    <meta name="twitter:image" content="https://adsbooster.onrender.com/App%20Icon.png">
+    <link rel="canonical" href="https://adsbooster.onrender.com/ai-voice-cloning.html">
+    <meta name="robots" content="index, follow">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .vc-form {
+            max-width: 500px;
+            margin: 2rem auto;
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 8px #0001;
+        }
+
+        .vc-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .vc-form input[type=file],
+        .vc-form textarea {
+            margin-bottom: 1rem;
+        }
+
+        .vc-form textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 0.4rem;
+            border: 1px solid #ccc;
+        }
+
+        .vc-result {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 0.7rem;
+            margin-top: 1rem;
+            min-height: 60px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="App Icon.png" alt="AdsBooster Logo" class="app-logo small-logo">
+        <h1 class="header-title">AI Voice Cloning Tool</h1>
+        <a href="index.html" class="cta-btn">⬅ Back to Dashboard</a>
+    </header>
+    <main>
+        <section class="tool-section">
+            <h2>AI Voice Cloning Tool</h2>
+            <form class="vc-form" id="vcForm">
+                <label>Upload Voice Sample (WAV/MP3):
+                    <input type="file" id="vcInput" accept="audio/*" required>
+                </label>
+                <label>Text to Speak:
+                    <textarea id="vcText" rows="3" required placeholder="Enter text to synthesize..."></textarea>
+                </label>
+                <button type="submit" class="cta-btn">Clone Voice</button>
+            </form>
+            <div class="vc-result" id="vcResult"></div>
+        </section>
+    </main>
+    <script>
+        document.getElementById('vcForm').onsubmit = function (e) {
+            e.preventDefault();
+            // Yahan par AI API call ka code aayega (future me)
+            document.getElementById('vcResult').innerHTML = '(AI voice output yahan aayega)';
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator | AdsBooster Tools</title>
+    <meta name="description"
+        content="Free online QR Code Generator. Create custom QR codes for text, URL, vCard. Download as PNG. No signup required.">
+    <meta name="keywords" content="QR Code Generator, Free QR Code, Online QR, QR PNG, QR SVG, QR Tool, AI Tools">
+    <meta property="og:title" content="QR Code Generator | AdsBooster Tools">
+    <meta property="og:description"
+        content="Create custom QR codes for text, URL, vCard. Download as PNG. Free, fast, and easy.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://adsbooster.onrender.com/qr-code-generator.html">
+    <meta property="og:image" content="https://adsbooster.onrender.com/App%20Icon.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="QR Code Generator | AdsBooster Tools">
+    <meta name="twitter:description"
+        content="Create custom QR codes for text, URL, vCard. Download as PNG. Free, fast, and easy.">
+    <meta name="twitter:image" content="https://adsbooster.onrender.com/App%20Icon.png">
+    <link rel="canonical" href="https://adsbooster.onrender.com/qr-code-generator.html">
+    <meta name="robots" content="index, follow">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+    <style>
+        .qr-form {
+            max-width: 400px;
+            margin: 2rem auto;
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 8px #0001;
+        }
+
+        .qr-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .qr-result {
+            margin-top: 1rem;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="App Icon.png" alt="AdsBooster Logo" class="app-logo small-logo">
+        <h1 class="header-title">QR Code Generator</h1>
+        <a href="index.html" class="cta-btn">⬅ Back to Dashboard</a>
+    </header>
+    <main>
+        <section class="tool-section">
+            <h2>Online QR Code Generator</h2>
+            <form class="qr-form" id="qrForm">
+                <label>Text/URL:
+                    <input type="text" id="qrText" required>
+                </label>
+                <button type="submit" class="cta-btn">Generate QR</button>
+            </form>
+            <div class="qr-result" id="qrResult"></div>
+        </section>
+    </main>
+    <script>
+        document.getElementById('qrForm').onsubmit = function (e) {
+            e.preventDefault();
+            const text = document.getElementById('qrText').value;
+            QRCode.toDataURL(text, { width: 200 }, function (err, url) {
+                document.getElementById('qrResult').innerHTML = `<img src="${url}" alt="QR Code"><br><a href="${url}" download="qrcode.png">Download PNG</a>`;
+            });
+        }
+    </script>
+</body>
+
+</html>

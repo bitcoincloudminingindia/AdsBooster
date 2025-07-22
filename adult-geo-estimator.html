@@ -108,17 +108,16 @@
         <a href="/" class="back-link">← Back to Home</a>
     </div>
     <script>
+        // Real Tier-1 countries for ad revenue
+        const tier1Countries = [
+            'United States', 'United Kingdom', 'Germany', 'France', 'Canada', 'Australia', 'Netherlands', 'Sweden', 'Switzerland', 'Norway'
+        ];
         function estimateGeo() {
             var volume = document.getElementById('volume').value;
-            var countries = [
-                'United States', 'United Kingdom', 'Germany', 'France', 'Canada', 'Australia', 'Netherlands', 'Sweden', 'Switzerland', 'Norway'
-            ];
-            var top = [];
-            if (volume === 'low') top = countries.slice(0, 3);
-            else if (volume === 'medium') top = countries.slice(0, 5);
-            else top = countries.slice(0, 7);
-            // Shuffle for demo randomness
-            top = top.sort(() => Math.random() - 0.5);
+            let top = [];
+            if (volume === 'low') top = tier1Countries.slice(0, 3);
+            else if (volume === 'medium') top = tier1Countries.slice(0, 5);
+            else top = tier1Countries.slice(0, 7);
             document.getElementById('geoResult').innerText = 'Top Tier-1 Countries: ' + top.join(', ');
         }
     </script>

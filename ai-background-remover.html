@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Background Remover | AdsBooster Tools</title>
+    <meta name="description"
+        content="AI Background Remover: Instantly remove image backgrounds with AI. Upload image, get transparent PNG in HD. Free and fast.">
+    <meta name="keywords"
+        content="AI Background Remover, Remove Background, Transparent PNG, Free Image Tool, AI Tools">
+    <meta property="og:title" content="AI Background Remover | AdsBooster Tools">
+    <meta property="og:description"
+        content="Remove image backgrounds with AI. Upload image, get transparent PNG in HD. Free and fast.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://adsbooster.onrender.com/ai-background-remover.html">
+    <meta property="og:image" content="https://adsbooster.onrender.com/App%20Icon.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AI Background Remover | AdsBooster Tools">
+    <meta name="twitter:description"
+        content="Remove image backgrounds with AI. Upload image, get transparent PNG in HD. Free and fast.">
+    <meta name="twitter:image" content="https://adsbooster.onrender.com/App%20Icon.png">
+    <link rel="canonical" href="https://adsbooster.onrender.com/ai-background-remover.html">
+    <meta name="robots" content="index, follow">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .bg-form {
+            max-width: 500px;
+            margin: 2rem auto;
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 8px #0001;
+        }
+
+        .bg-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .bg-form input[type=file] {
+            margin-bottom: 1rem;
+        }
+
+        .bg-result {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 0.7rem;
+            margin-top: 1rem;
+            min-height: 60px;
+            text-align: center;
+        }
+
+        .bg-result img {
+            max-width: 100%;
+            border-radius: 0.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="App Icon.png" alt="AdsBooster Logo" class="app-logo small-logo">
+        <h1 class="header-title">AI Background Remover</h1>
+        <a href="index.html" class="cta-btn">⬅ Back to Dashboard</a>
+    </header>
+    <main>
+        <section class="tool-section">
+            <h2>AI Background Remover</h2>
+            <form class="bg-form" id="bgForm">
+                <label>Upload Image:
+                    <input type="file" id="bgInput" accept="image/*" required>
+                </label>
+                <button type="submit" class="cta-btn">Remove Background</button>
+            </form>
+            <div class="bg-result" id="bgResult"></div>
+        </section>
+    </main>
+    <script>
+        document.getElementById('bgForm').onsubmit = async function (e) {
+            e.preventDefault();
+            const file = document.getElementById('bgInput').files[0];
+            if (!file) return;
+            document.getElementById('bgResult').innerHTML = 'Processing...';
+            try {
+                const formData = new FormData();
+                formData.append('file', file);
+                const res = await fetch('http://localhost:5000/api/ai/bg-remove', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+                document.getElementById('bgResult').innerHTML = `<img src='${data.url}' alt='AI Output'><br>(AI output yahan aayega)`;
+            } catch (err) {
+                document.getElementById('bgResult').innerHTML = 'Error: ' + err.message;
+            }
+        }
+    </script>
+</body>
+
+</html>

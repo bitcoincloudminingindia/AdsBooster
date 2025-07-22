@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan EMI Calculator | AdsBooster Tools</title>
+    <meta name="description"
+        content="Free Loan EMI Calculator: Calculate your monthly EMI, total interest, and amortization schedule. Fast, accurate, and easy to use.">
+    <meta name="keywords"
+        content="Loan EMI Calculator, EMI Calculator, Loan Calculator, Amortization, Interest Calculator, Finance Tools, AI Tools">
+    <meta property="og:title" content="Loan EMI Calculator | AdsBooster Tools">
+    <meta property="og:description"
+        content="Calculate your monthly EMI, total interest, and amortization schedule. Free, fast, and accurate.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://adsbooster.onrender.com/loan-emi-calculator.html">
+    <meta property="og:image" content="https://adsbooster.onrender.com/App%20Icon.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Loan EMI Calculator | AdsBooster Tools">
+    <meta name="twitter:description"
+        content="Calculate your monthly EMI, total interest, and amortization schedule. Free, fast, and accurate.">
+    <meta name="twitter:image" content="https://adsbooster.onrender.com/App%20Icon.png">
+    <link rel="canonical" href="https://adsbooster.onrender.com/loan-emi-calculator.html">
+    <meta name="robots" content="index, follow">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .emi-form {
+            max-width: 400px;
+            margin: 2rem auto;
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 8px #0001;
+        }
+
+        .emi-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .emi-form input {
+            width: 100%;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border-radius: 0.4rem;
+            border: 1px solid #ccc;
+        }
+
+        .emi-result {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 0.7rem;
+            margin-top: 1rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 0.4rem;
+            text-align: right;
+        }
+
+        th {
+            background: #f0f0f0;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="App Icon.png" alt="AdsBooster Logo" class="app-logo small-logo">
+        <h1 class="header-title">Loan EMI Calculator</h1>
+        <a href="index.html" class="cta-btn">⬅ Back to Dashboard</a>
+    </header>
+    <main>
+        <section class="tool-section">
+            <h2>Loan EMI Calculator</h2>
+            <form class="emi-form" id="emiForm">
+                <label>Loan Amount (₹)
+                    <input type="number" id="amount" required min="1000" step="100">
+                </label>
+                <label>Interest Rate (% per annum)
+                    <input type="number" id="rate" required min="0.1" step="0.01">
+                </label>
+                <label>Tenure (months)
+                    <input type="number" id="tenure" required min="1" step="1">
+                </label>
+                <button type="submit" class="cta-btn">Calculate EMI</button>
+            </form>
+            <div class="emi-result hidden" id="emiResult"></div>
+        </section>
+    </main>
+    <script>
+        document.getElementById('emiForm').onsubmit = function (e) {
+            e.preventDefault();
+            const P = parseFloat(document.getElementById('amount').value);
+            const R = parseFloat(document.getElementById('rate').value) / 12 / 100;
+            const N = parseInt(document.getElementById('tenure').value);
+            const emi = (P * R * Math.pow(1 + R, N)) / (Math.pow(1 + R, N) - 1);
+            let result = `<b>Monthly EMI:</b> ₹${emi.toFixed(2)}<br><b>Total Payment:</b> ₹${(emi * N).toFixed(2)}<br><b>Total Interest:</b> ₹${(emi * N - P).toFixed(2)}`;
+            // Amortization Table
+            let balance = P, table = `<table><tr><th>Month</th><th>Principal</th><th>Interest</th><th>Balance</th></tr>`;
+            for (let i = 1; i <= N; i++) {
+                let interest = balance * R;
+                let principal = emi - interest;
+                balance -= principal;
+                table += `<tr><td>${i}</td><td>${principal.toFixed(2)}</td><td>${interest.toFixed(2)}</td><td>${balance > 0 ? balance.toFixed(2) : '0.00'}</td></tr>`;
+            }
+            table += `</table>`;
+            document.getElementById('emiResult').innerHTML = result + table;
+            document.getElementById('emiResult').classList.remove('hidden');
+        }
+    </script>
+</body>
+
+</html>

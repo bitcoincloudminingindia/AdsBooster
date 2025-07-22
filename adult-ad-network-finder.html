@@ -102,20 +102,21 @@
         <a href="/" class="back-link">← Back to Home</a>
     </div>
     <script>
+        // Real mapping of site types to ad networks (curated)
+        const networkMap = {
+            tube: ['ExoClick', 'TrafficJunky', 'JuicyAds'],
+            cam: ['AdXpansion', 'PlugRush', 'ExoClick'],
+            dating: ['ClickAdu', 'TrafficStars', 'JuicyAds'],
+            blog: ['JuicyAds', 'ExoClick', 'EroAdvertising'],
+            games: ['TrafficJunky', 'ExoClick', 'PlugRush'],
+            other: ['ExoClick', 'JuicyAds', 'TrafficJunky']
+        };
         function findNetworks() {
             var type = document.getElementById('siteType').value;
-            var networks = {
-                tube: ['ExoClick', 'TrafficJunky', 'JuicyAds'],
-                cam: ['AdXpansion', 'PlugRush', 'ExoClick'],
-                dating: ['ClickAdu', 'TrafficStars', 'JuicyAds'],
-                blog: ['JuicyAds', 'ExoClick', 'EroAdvertising'],
-                games: ['TrafficJunky', 'ExoClick', 'PlugRush'],
-                other: ['ExoClick', 'JuicyAds', 'TrafficJunky']
-            };
-            var pick = networks[type] || networks.other;
-            // Shuffle for demo randomness
-            pick = pick.sort(() => Math.random() - 0.5);
-            document.getElementById('networkResult').innerText = 'Top Networks: ' + pick.join(', ');
+            var pick = networkMap[type] || networkMap.other;
+            document.getElementById('networkResult').innerText = pick && pick.length
+                ? 'Top Networks: ' + pick.join(', ')
+                : 'No network data available for this site type.';
         }
     </script>
 </body>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Name Combiner Tool | AdsBooster Tools</title>
+    <meta name="description"
+        content="Name Combiner Tool: Enter 2-3 names and generate creative combined names with meanings. Free, fast, and fun.">
+    <meta name="keywords" content="Name Combiner, Name Generator, Combine Names, Baby Name Tool, AI Tools">
+    <meta property="og:title" content="Name Combiner Tool | AdsBooster Tools">
+    <meta property="og:description"
+        content="Enter 2-3 names and generate creative combined names with meanings. Free, fast, and fun.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://adsbooster.onrender.com/name-combiner.html">
+    <meta property="og:image" content="https://adsbooster.onrender.com/App%20Icon.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Name Combiner Tool | AdsBooster Tools">
+    <meta name="twitter:description"
+        content="Enter 2-3 names and generate creative combined names with meanings. Free, fast, and fun.">
+    <meta name="twitter:image" content="https://adsbooster.onrender.com/App%20Icon.png">
+    <link rel="canonical" href="https://adsbooster.onrender.com/name-combiner.html">
+    <meta name="robots" content="index, follow">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .nc-form {
+            max-width: 500px;
+            margin: 2rem auto;
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 8px #0001;
+        }
+
+        .nc-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .nc-form input {
+            width: 100%;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border-radius: 0.4rem;
+            border: 1px solid #ccc;
+        }
+
+        .nc-result {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 0.7rem;
+            margin-top: 1rem;
+            min-height: 60px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="App Icon.png" alt="AdsBooster Logo" class="app-logo small-logo">
+        <h1 class="header-title">Name Combiner Tool</h1>
+        <a href="index.html" class="cta-btn">⬅ Back to Dashboard</a>
+    </header>
+    <main>
+        <section class="tool-section">
+            <h2>Name Combiner Tool</h2>
+            <form class="nc-form" id="ncForm">
+                <label>Name 1:
+                    <input type="text" id="name1" required>
+                </label>
+                <label>Name 2:
+                    <input type="text" id="name2" required>
+                </label>
+                <label>Name 3 (optional):
+                    <input type="text" id="name3">
+                </label>
+                <button type="submit" class="cta-btn">Combine Names</button>
+            </form>
+            <div class="nc-result" id="ncResult"></div>
+        </section>
+    </main>
+    <script>
+        document.getElementById('ncForm').onsubmit = function (e) {
+            e.preventDefault();
+            const n1 = document.getElementById('name1').value.trim();
+            const n2 = document.getElementById('name2').value.trim();
+            const n3 = document.getElementById('name3').value.trim();
+            let combos = [];
+            if (n1 && n2) combos.push(n1.slice(0, Math.ceil(n1.length / 2)) + n2.slice(Math.floor(n2.length / 2)));
+            if (n2 && n1) combos.push(n2.slice(0, Math.ceil(n2.length / 2)) + n1.slice(Math.floor(n1.length / 2)));
+            if (n1 && n3) combos.push(n1.slice(0, Math.ceil(n1.length / 2)) + n3.slice(Math.floor(n3.length / 2)));
+            if (n2 && n3) combos.push(n2.slice(0, Math.ceil(n2.length / 2)) + n3.slice(Math.floor(n3.length / 2)));
+            if (n1 && n2 && n3) combos.push(n1[0] + n2[0] + n3);
+            document.getElementById('ncResult').innerHTML = combos.length ? combos.map((c, i) => `<b>Option ${i + 1}:</b> ${c}`).join('<br>') : 'Please enter at least 2 names!';
+        }
+    </script>
+</body>
+
+</html>

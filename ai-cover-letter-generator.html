@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Cover Letter Generator | AdsBooster Tools</title>
+    <meta name="description"
+        content="AI Cover Letter Generator: Instantly generate 2-3 personalized cover letters using AI. Free, fast, and optimized for job seekers.">
+    <meta name="keywords"
+        content="AI Cover Letter Generator, Cover Letter, Job Application, AI Tools, Free Cover Letter, Resume Tools">
+    <meta property="og:title" content="AI Cover Letter Generator | AdsBooster Tools">
+    <meta property="og:description"
+        content="Generate 2-3 personalized cover letters with AI. Free, fast, and optimized for job seekers.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://adsbooster.onrender.com/ai-cover-letter-generator.html">
+    <meta property="og:image" content="https://adsbooster.onrender.com/App%20Icon.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AI Cover Letter Generator | AdsBooster Tools">
+    <meta name="twitter:description"
+        content="Generate 2-3 personalized cover letters with AI. Free, fast, and optimized for job seekers.">
+    <meta name="twitter:image" content="https://adsbooster.onrender.com/App%20Icon.png">
+    <link rel="canonical" href="https://adsbooster.onrender.com/ai-cover-letter-generator.html">
+    <meta name="robots" content="index, follow">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .cl-form {
+            max-width: 500px;
+            margin: 2rem auto;
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 8px #0001;
+        }
+
+        .cl-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .cl-form textarea {
+            width: 100%;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border-radius: 0.4rem;
+            border: 1px solid #ccc;
+        }
+
+        .cl-results {
+            margin-top: 2rem;
+        }
+
+        .cl-card {
+            background: #f8fafc;
+            border-radius: 0.7rem;
+            padding: 1rem;
+            margin-bottom: 1.2rem;
+            box-shadow: 0 1px 4px #0001;
+        }
+
+        .cl-card pre {
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="App Icon.png" alt="AdsBooster Logo" class="app-logo small-logo">
+        <h1 class="header-title">AI Cover Letter Generator</h1>
+        <a href="index.html" class="cta-btn">⬅ Back to Dashboard</a>
+    </header>
+    <main>
+        <section class="tool-section">
+            <h2>AI Cover Letter Generator</h2>
+            <form class="cl-form" id="clForm">
+                <label>Job Description
+                    <textarea id="jobDesc" rows="3" required placeholder="Paste job description..."></textarea>
+                </label>
+                <label>Your Resume
+                    <textarea id="resumeText" rows="3" required placeholder="Paste your resume..."></textarea>
+                </label>
+                <button type="submit" class="cta-btn">Generate Cover Letters</button>
+            </form>
+            <div class="cl-results hidden" id="clResults">
+                <div class="cl-card">
+                    <h3>Cover Letter 1</h3>
+                    <pre id="cl1">(AI generated cover letter will appear here)</pre>
+                </div>
+                <div class="cl-card">
+                    <h3>Cover Letter 2</h3>
+                    <pre id="cl2">(AI generated cover letter will appear here)</pre>
+                </div>
+                <div class="cl-card">
+                    <h3>Cover Letter 3</h3>
+                    <pre id="cl3">(AI generated cover letter will appear here)</pre>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script>
+        document.getElementById('clForm').onsubmit = async function (e) {
+            e.preventDefault();
+            const jobDesc = document.getElementById('jobDesc').value;
+            const resumeText = document.getElementById('resumeText').value;
+            document.getElementById('cl1').textContent = 'Loading...';
+            document.getElementById('cl2').textContent = '';
+            document.getElementById('cl3').textContent = '';
+            document.getElementById('clResults').classList.remove('hidden');
+            try {
+                const res = await fetch('http://localhost:5000/api/ai/cover-letter', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ jobDesc, resumeText })
+                });
+                const data = await res.json();
+                document.getElementById('cl1').textContent = data.letters[0] || '';
+                document.getElementById('cl2').textContent = data.letters[1] || '';
+                document.getElementById('cl3').textContent = data.letters[2] || '';
+            } catch (err) {
+                document.getElementById('cl1').textContent = 'Error: ' + err.message;
+            }
+        }
+    </script>
+</body>
+
+</html>

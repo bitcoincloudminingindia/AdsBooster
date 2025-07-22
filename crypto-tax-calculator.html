@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Tax Calculator | AdsBooster Tools</title>
+    <meta name="description"
+        content="Crypto Tax Calculator: Upload your trade CSV, calculate gains/losses using FIFO/LIFO, and get a detailed tax report. Free, fast, and secure.">
+    <meta name="keywords" content="Crypto Tax Calculator, Crypto Tax, Tax Tool, FIFO, LIFO, Tax Report, AI Tools">
+    <meta property="og:title" content="Crypto Tax Calculator | AdsBooster Tools">
+    <meta property="og:description"
+        content="Upload your trade CSV, calculate gains/losses using FIFO/LIFO, and get a detailed tax report. Free, fast, and secure.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://adsbooster.onrender.com/crypto-tax-calculator.html">
+    <meta property="og:image" content="https://adsbooster.onrender.com/App%20Icon.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Crypto Tax Calculator | AdsBooster Tools">
+    <meta name="twitter:description"
+        content="Upload your trade CSV, calculate gains/losses using FIFO/LIFO, and get a detailed tax report. Free, fast, and secure.">
+    <meta name="twitter:image" content="https://adsbooster.onrender.com/App%20Icon.png">
+    <link rel="canonical" href="https://adsbooster.onrender.com/crypto-tax-calculator.html">
+    <meta name="robots" content="index, follow">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .ctc-form {
+            max-width: 500px;
+            margin: 2rem auto;
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 8px #0001;
+        }
+
+        .ctc-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .ctc-form input[type=file],
+        .ctc-form select {
+            margin-bottom: 1rem;
+        }
+
+        .ctc-result {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 0.7rem;
+            margin-top: 1rem;
+            min-height: 60px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="App Icon.png" alt="AdsBooster Logo" class="app-logo small-logo">
+        <h1 class="header-title">Crypto Tax Calculator</h1>
+        <a href="index.html" class="cta-btn">⬅ Back to Dashboard</a>
+    </header>
+    <main>
+        <section class="tool-section">
+            <h2>Crypto Tax Calculator</h2>
+            <form class="ctc-form" id="ctcForm">
+                <label>Upload Trade CSV:
+                    <input type="file" id="ctcInput" accept=".csv" required>
+                </label>
+                <label>Calculation Method:
+                    <select id="ctcMethod">
+                        <option value="FIFO">FIFO</option>
+                        <option value="LIFO">LIFO</option>
+                    </select>
+                </label>
+                <button type="submit" class="cta-btn">Calculate Tax</button>
+            </form>
+            <div class="ctc-result" id="ctcResult"></div>
+        </section>
+    </main>
+    <script>
+        document.getElementById('ctcForm').onsubmit = async function (e) {
+            e.preventDefault();
+            const file = document.getElementById('ctcInput').files[0];
+            const method = document.getElementById('ctcMethod').value;
+            if (!file) return;
+            document.getElementById('ctcResult').innerHTML = 'Processing...';
+            try {
+                const formData = new FormData();
+                formData.append('csv', file);
+                formData.append('method', method);
+                const res = await fetch('http://localhost:5000/api/ai/crypto-tax', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+                document.getElementById('ctcResult').innerHTML = `<b>Method:</b> ${data.method}<br><b>Gain/Loss:</b> $${data.gain}<br><b>Report:</b> ${data.report}`;
+            } catch (err) {
+                document.getElementById('ctcResult').innerHTML = 'Error: ' + err.message;
+            }
+        }
+    </script>
+</body>
+
+</html>

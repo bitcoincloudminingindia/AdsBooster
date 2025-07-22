@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Meme Generator | AdsBooster Tools</title>
+    <meta name="description"
+        content="AI Meme Generator: Pick a template, get witty AI captions, and download/share your meme. Free, fast, and fun.">
+    <meta name="keywords" content="AI Meme Generator, Meme Maker, Meme Tool, Funny Meme, AI Tools, Free Meme">
+    <meta property="og:title" content="AI Meme Generator | AdsBooster Tools">
+    <meta property="og:description"
+        content="Pick a template, get witty AI captions, and download/share your meme. Free, fast, and fun.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://adsbooster.onrender.com/ai-meme-generator.html">
+    <meta property="og:image" content="https://adsbooster.onrender.com/App%20Icon.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AI Meme Generator | AdsBooster Tools">
+    <meta name="twitter:description"
+        content="Pick a template, get witty AI captions, and download/share your meme. Free, fast, and fun.">
+    <meta name="twitter:image" content="https://adsbooster.onrender.com/App%20Icon.png">
+    <link rel="canonical" href="https://adsbooster.onrender.com/ai-meme-generator.html">
+    <meta name="robots" content="index, follow">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .meme-form {
+            max-width: 500px;
+            margin: 2rem auto;
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 8px #0001;
+        }
+
+        .meme-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .meme-form select,
+        .meme-form input {
+            width: 100%;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border-radius: 0.4rem;
+            border: 1px solid #ccc;
+        }
+
+        .meme-result {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 0.7rem;
+            margin-top: 1rem;
+            min-height: 60px;
+            text-align: center;
+        }
+
+        .meme-result img {
+            max-width: 100%;
+            border-radius: 0.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="App Icon.png" alt="AdsBooster Logo" class="app-logo small-logo">
+        <h1 class="header-title">AI Meme Generator</h1>
+        <a href="index.html" class="cta-btn">⬅ Back to Dashboard</a>
+    </header>
+    <main>
+        <section class="tool-section">
+            <h2>AI Meme Generator</h2>
+            <form class="meme-form" id="memeForm">
+                <label>Template:
+                    <select id="memeTemplate">
+                        <option value="drake">Drake Hotline Bling</option>
+                        <option value="distracted">Distracted Boyfriend</option>
+                        <option value="doge">Doge</option>
+                    </select>
+                </label>
+                <label>Caption:
+                    <input type="text" id="memeCaption" required>
+                </label>
+                <button type="submit" class="cta-btn">Generate Meme</button>
+            </form>
+            <div class="meme-result" id="memeResult"></div>
+        </section>
+    </main>
+    <script>
+        const templates = {
+            drake: 'https://i.imgflip.com/30b1gx.jpg',
+            distracted: 'https://i.imgflip.com/1ur9b0.jpg',
+            doge: 'https://i.imgflip.com/4t0m5.jpg'
+        };
+        document.getElementById('memeForm').onsubmit = async function (e) {
+            e.preventDefault();
+            const template = document.getElementById('memeTemplate').value;
+            const caption = document.getElementById('memeCaption').value;
+            document.getElementById('memeResult').innerHTML = 'Loading...';
+            try {
+                const res = await fetch('http://localhost:5000/api/ai/meme', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ template, caption })
+                });
+                const data = await res.json();
+                document.getElementById('memeResult').innerHTML = `<img src='${templates[template]}' alt='Meme'><br><b>AI Caption:</b> ${data.meme || ''}<br>`;
+            } catch (err) {
+                document.getElementById('memeResult').innerHTML = 'Error: ' + err.message;
+            }
+        }
+    </script>
+</body>
+
+</html>

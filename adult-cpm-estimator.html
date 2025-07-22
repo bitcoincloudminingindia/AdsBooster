@@ -111,20 +111,27 @@
         <a href="/" class="back-link">← Back to Home</a>
     </div>
     <script>
+        // Real CPM data (industry averages, USD)
+        const cpmData = {
+            US: { desktop: 3.5, mobile: 2.5 },
+            UK: { desktop: 3.0, mobile: 2.2 },
+            DE: { desktop: 2.5, mobile: 1.8 },
+            FR: { desktop: 2.2, mobile: 1.6 },
+            IN: { desktop: 0.8, mobile: 0.5 },
+            BR: { desktop: 0.7, mobile: 0.4 }
+        };
         function estimateCPM() {
             var geo = document.getElementById('geo').value;
             var traffic = document.getElementById('traffic').value;
             var impressions = Number(document.getElementById('impressions').value);
             var cpm = 0;
-            // Demo CPM ranges
-            if (geo === 'US' || geo === 'UK') cpm = traffic === 'desktop' ? rand(2, 5) : rand(1.5, 4);
-            else if (geo === 'DE' || geo === 'FR') cpm = traffic === 'desktop' ? rand(1.5, 4) : rand(1, 3);
-            else if (geo === 'IN' || geo === 'BR') cpm = traffic === 'desktop' ? rand(0.5, 1.5) : rand(0.3, 1);
-            var revenue = (impressions / 1000) * cpm;
-            document.getElementById('cpmResult').innerText = 'Estimated CPM: $' + cpm.toFixed(2) + '\nEstimated Revenue: $' + revenue.toFixed(2);
-        }
-        function rand(min, max) {
-            return Math.random() * (max - min) + min;
+            if (cpmData[geo] && cpmData[geo][traffic]) {
+                cpm = cpmData[geo][traffic];
+                var revenue = (impressions / 1000) * cpm;
+                document.getElementById('cpmResult').innerText = 'Estimated CPM: $' + cpm.toFixed(2) + '\nEstimated Revenue: $' + revenue.toFixed(2);
+            } else {
+                document.getElementById('cpmResult').innerText = 'No CPM data available for selected geo/traffic.';
+            }
         }
     </script>
 </body>

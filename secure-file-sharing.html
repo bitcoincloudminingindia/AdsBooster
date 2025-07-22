@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure File Sharing | AdsBooster Tools</title>
+    <meta name="description"
+        content="Secure File Sharing: Upload files, get encrypted expiring links. Password-protected, private, and free. Share files safely online.">
+    <meta name="keywords"
+        content="Secure File Sharing, Encrypted File, Expiring Link, File Upload, Private File, AI Tools">
+    <meta property="og:title" content="Secure File Sharing | AdsBooster Tools">
+    <meta property="og:description"
+        content="Upload files, get encrypted expiring links. Password-protected, private, and free. Share files safely online.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://adsbooster.onrender.com/secure-file-sharing.html">
+    <meta property="og:image" content="https://adsbooster.onrender.com/App%20Icon.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Secure File Sharing | AdsBooster Tools">
+    <meta name="twitter:description"
+        content="Upload files, get encrypted expiring links. Password-protected, private, and free. Share files safely online.">
+    <meta name="twitter:image" content="https://adsbooster.onrender.com/App%20Icon.png">
+    <link rel="canonical" href="https://adsbooster.onrender.com/secure-file-sharing.html">
+    <meta name="robots" content="index, follow">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .sf-form {
+            max-width: 500px;
+            margin: 2rem auto;
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 8px #0001;
+        }
+
+        .sf-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .sf-form input[type=file] {
+            margin-bottom: 1rem;
+        }
+
+        .sf-result {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 0.7rem;
+            margin-top: 1rem;
+            min-height: 60px;
+            word-break: break-all;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="App Icon.png" alt="AdsBooster Logo" class="app-logo small-logo">
+        <h1 class="header-title">Secure File Sharing (encrypted, expiring links)</h1>
+        <a href="index.html" class="cta-btn">⬅ Back to Dashboard</a>
+    </header>
+    <main>
+        <section class="tool-section">
+            <h2>Secure File Sharing (encrypted, expiring links)</h2>
+            <form class="sf-form" id="sfForm">
+                <label>Upload File:
+                    <input type="file" id="sfInput" required>
+                </label>
+                <button type="submit" class="cta-btn">Generate Secure Link</button>
+            </form>
+            <div class="sf-result" id="sfResult"></div>
+        </section>
+    </main>
+    <script>
+        document.getElementById('sfForm').onsubmit = async function (e) {
+            e.preventDefault();
+            const file = document.getElementById('sfInput').files[0];
+            if (!file) return;
+            document.getElementById('sfResult').innerHTML = 'Uploading...';
+            try {
+                const formData = new FormData();
+                formData.append('file', file);
+                const res = await fetch('http://localhost:5000/api/file/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+                document.getElementById('sfResult').innerHTML = `<b>Secure Link:</b> <a href='${data.link}' target='_blank'>${data.link}</a> (Demo link)`;
+            } catch (err) {
+                document.getElementById('sfResult').innerHTML = 'Error: ' + err.message;
+            }
+        }
+    </script>
+</body>
+
+</html>

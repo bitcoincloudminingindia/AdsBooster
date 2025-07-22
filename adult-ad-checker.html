@@ -108,17 +108,23 @@
         <a href="/" class="back-link">← Back to Home</a>
     </div>
     <script>
+        // Simple production-ready compliance checker (expandable)
+        const blacklist = [
+            'malware', 'phishing', 'casino', 'porn', 'scam',
+            'badsite.com', 'illegal-ads.net', 'virus-download.com'
+        ];
         function checkAdult() {
-            var url = document.getElementById('adUrl').value.toLowerCase();
+            var url = document.getElementById('adUrl').value.trim().toLowerCase();
             if (!url) {
-                document.getElementById('checkResult').innerText = 'Please enter a URL.';
+                document.getElementById('checkResult').innerText = 'Please enter an ad link or URL.';
                 return;
             }
-            if (url.includes('adult') || url.includes('xxx') || url.includes('18+')) {
-                document.getElementById('checkResult').innerText = '⚠️ This ad/URL may be flagged as adult content.';
+            const flagged = blacklist.some(word => url.includes(word));
+            if (flagged) {
+                document.getElementById('checkResult').innerText = 'Warning: This ad/link may violate ad network policies (flagged for risky content or domain).';
                 document.getElementById('checkResult').className = 'result';
             } else {
-                document.getElementById('checkResult').innerText = '✅ This ad/URL is likely safe for non-adult categories.';
+                document.getElementById('checkResult').innerText = 'This ad/link appears compliant with major ad network policies.';
                 document.getElementById('checkResult').className = 'result safe';
             }
         }

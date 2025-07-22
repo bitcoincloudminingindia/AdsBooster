@@ -1,240 +1,139 @@
 const express = require('express');
+const helmet = require('helmet');
 const cors = require('cors');
-const axios = require('axios');
-const { getProxy, getProviderStatus, markProxyFailed, markProxyScrapeUsed, lastUsedProxyInfo } = require('./proxyPool');
-const { MongoClient } = require('mongodb');
+const rateLimit = require('express-rate-limit');
 require('dotenv').config();
-console.log('MONGO_URI:', process.env.MONGO_URI);
-const path = require('path');
+const { MongoClient } = require('mongodb');
+const session = require('express-session');
+const passport = require('passport');
+const logger = require('./logger');
+const csurf = require('csurf');
 
 const app = express();
-// Serve static files from the root directory
-app.use(express.static(__dirname));
-const PORT = process.env.PORT || 3001;
 
-app.use(cors());
+// Helmet for HTTP security headers
+app.use(helmet());
 
-// MongoDB connection test on server start
-(async () => {
-    try {
-        const client = new MongoClient(process.env.MONGO_URI);
-        await client.connect();
-        await client.db('adsbooster').command({ ping: 1 });
-        console.log('MongoDB connection: SUCCESS');
-        await client.close();
-    } catch (err) {
-        console.error('MongoDB connection: FAILED', err.message);
-    }
-})();
-
-// --- User Data Structure (In-memory) ---
-const users = {};
-const REWARD_PER_ACTIVITY = 10; // हर valid activity पर मिलने वाले points
-const MIN_REFRESH_INTERVAL = 10 * 1000; // 10 seconds (ms)
-
-// --- /ad-activity Endpoint ---
-// Example: /ad-activity?userId=xyz&type=view
-app.get('/ad-activity', (req, res) => {
-    const userId = req.query.userId;
-    const activityType = req.query.type; // 'view' या 'click'
-    const now = Date.now();
-
-    if (!userId || !activityType) {
-        return res.status(400).json({ success: false, message: 'Missing userId or activity type' });
-    }
-
-    // User init
-    if (!users[userId]) {
-        users[userId] = {
-            reward: 0,
-            lastActivity: 0,
-            suspicious: false,
-            activityLog: []
-        };
-    }
-
-    const user = users[userId];
-
-    // Fraud Detection: Minimum refresh interval
-    if (now - user.lastActivity < MIN_REFRESH_INTERVAL) {
-        user.suspicious = true;
-        user.activityLog.push({ time: now, type: activityType, status: 'suspicious' });
-        return res.status(429).json({ success: false, message: 'Too many requests. Suspicious activity detected.' });
-    }
-
-    // Activity Log
-    user.lastActivity = now;
-    user.activityLog.push({ time: now, type: activityType, status: 'valid' });
-
-    // Reward Assignment (अगर suspicious नहीं है)
-    if (!user.suspicious) {
-        user.reward += REWARD_PER_ACTIVITY;
-    }
-
-    return res.json({
-        success: true,
-        reward: user.reward,
-        suspicious: user.suspicious
-    });
-});
-
-// --- User Reward Balance Endpoint ---
-// Example: /user-reward?userId=xyz
-app.get('/user-reward', (req, res) => {
-    const userId = req.query.userId;
-    if (!userId) {
-        return res.status(400).json({ success: false, message: 'Missing userId' });
-    }
-    const user = users[userId];
-    if (!user) {
-        return res.status(404).json({ success: false, message: 'User not found' });
-    }
-    return res.json({
-        success: true,
-        reward: user.reward,
-        suspicious: user.suspicious
-    });
-});
-
-// /fetch?url=...&country=...&rotate=1
-app.get('/fetch', async (req, res) => {
-    const { url, country, rotate } = req.query;
-    if (!url) return res.status(400).json({ error: 'Missing url param' });
-
-    let attempts = 0;
-    const maxAttempts = parseInt(process.env.PROXY_RETRY_LIMIT || '3', 10);
-    const timeout = parseInt(process.env.REQUEST_TIMEOUT || '7000', 10);
-
-    while (attempts < maxAttempts) {
-        try {
-            // Get proxy with session management
-            const sessionId = req.query.session || `session_${Date.now()}`;
-            const proxy = getProxy({
-                country,
-                city: req.query.city,
-                session: rotate === '1' ? sessionId : null
-            });
-
-            if (!proxy) {
-                throw new Error(`No proxy available for country: ${country}`);
-            }
-
-            const axiosConfig = {
-                proxy: proxy.axiosConfig,
-                headers: proxy.headers,
-                timeout: timeout,
-                responseType: 'arraybuffer', // For binary (images, etc.)
-                validateStatus: () => true,
-            };
-
-            // Handle different proxy types
-            let response;
-            if (proxy.provider === 'ScraperAPI') {
-                // Use ScraperAPI direct call
-                const scraperUrl = `${proxy.scraperApiUrl}${encodeURIComponent(url)}`;
-                response = await axios.get(scraperUrl, {
-                    headers: proxy.headers,
-                    timeout: timeout,
-                    responseType: 'arraybuffer',
-                    validateStatus: () => true,
-                });
-
-                // Update ScraperAPI usage
-                // markScraperApiUsed(); // This line is removed as per the edit hint.
-
-                console.log(`✅ Success via ScraperAPI (attempt ${attempts + 1})`);
-            } else if (proxy.provider === 'ProxyScrape') {
-                // Use ProxyScrape API
-                const proxyScrapeUrl = `${proxy.proxyScrapeUrl}&url=${encodeURIComponent(url)}`;
-                response = await axios.get(proxyScrapeUrl, {
-                    headers: proxy.headers,
-                    timeout: timeout,
-                    responseType: 'arraybuffer',
-                    validateStatus: () => true,
-                });
-
-                // Update ProxyScrape usage
-                markProxyScrapeUsed();
-
-                console.log(`✅ Success via ProxyScrape (attempt ${attempts + 1})`);
-            } else {
-                // Use traditional proxy (Webshare.io)
-                response = await axios.get(url, axiosConfig);
-                console.log(`✅ Success via ${proxy.proxyUrl} (attempt ${attempts + 1})`);
-            }
-
-            // Forward status, headers, and body
-            res.status(response.status);
-            Object.entries(response.headers).forEach(([k, v]) => res.setHeader(k, v));
-            res.send(response.data);
-            return;
-
-        } catch (err) {
-            attempts++;
-            console.log(`❌ Failed via proxy (attempt ${attempts}/${maxAttempts}): ${err.message}`);
-
-            // Mark proxy as failed if it's a connection error
-            if (err.code === 'ECONNREFUSED' || err.code === 'ETIMEDOUT' || err.code === 'ENOTFOUND') {
-                const proxy = getProxy({ country, session: req.query.session });
-                if (proxy) {
-                    markProxyFailed(proxy.proxyUrl);
-                }
-            }
-
-            if (attempts >= maxAttempts) {
-                res.status(502).json({
-                    error: 'All proxy attempts failed',
-                    details: err.message,
-                    attempts: attempts,
-                    country: country
-                });
-                return;
-            }
+// HTTPS enforcement in production
+if (process.env.NODE_ENV === 'production') {
+    app.use((req, res, next) => {
+        if (req.headers['x-forwarded-proto'] && req.headers['x-forwarded-proto'] !== 'https') {
+            return res.redirect(301, 'https://' + req.headers.host + req.originalUrl);
         }
-    }
-});
+        next();
+    });
+}
 
-// /test-link?url=...&country=...
-app.get('/test-link', async (req, res) => {
-    const { url, country } = req.query;
-    if (!url) return res.status(400).json({ error: 'Missing url param' });
-    try {
-        const proxy = getProxy({ country });
-        if (!proxy) return res.status(502).json({ error: 'No proxy available for country: ' + country });
-        const axiosConfig = {
-            proxy: proxy.axiosConfig,
-            headers: proxy.headers,
-            timeout: 7000,
-            validateStatus: () => true,
-        };
-        const response = await require('axios').get(url, axiosConfig);
-        if (response.status === 200) {
-            res.json({ success: true, status: response.status });
+// CORS restrictions
+const allowedOrigins = (process.env.CORS_ORIGINS || '').split(',').map(o => o.trim()).filter(Boolean);
+const corsOptions = {
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps, curl, etc.)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.length === 0 || allowedOrigins.includes(origin)) {
+            return callback(null, true);
         } else {
-            res.status(400).json({ success: false, status: response.status, error: 'Non-200 status' });
+            logger.warn(`Blocked CORS request from origin: ${origin}`);
+            return callback(new Error('Not allowed by CORS'));
         }
-    } catch (err) {
-        res.status(500).json({ success: false, error: err.message });
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+};
+app.use(cors(corsOptions));
+
+app.use(express.json());
+// NOTE: In production, use a scalable session store like connect-mongo or connect-redis
+// Example (uncomment and configure as needed):
+// const MongoStore = require('connect-mongo');
+// app.use(session({
+//   store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
+//   secret: process.env.SESSION_SECRET,
+//   resave: false,
+//   saveUninitialized: false,
+//   cookie: { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', maxAge: 2 * 60 * 60 * 1000 }
+// }));
+app.use(session({
+    secret: process.env.SESSION_SECRET || 'your_secret',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 2 * 60 * 60 * 1000 // 2 hours
     }
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+// CSRF protection (exclude safe methods and public download route)
+const csrfProtection = csurf({ cookie: false });
+app.use((req, res, next) => {
+    // Exclude GET/HEAD/OPTIONS and file download route from CSRF
+    if (['GET', 'HEAD', 'OPTIONS'].includes(req.method) || req.path.startsWith('/api/file/download')) {
+        return next();
+    }
+    csrfProtection(req, res, next);
+});
+// Send CSRF token for frontend use
+app.use((req, res, next) => {
+    if (req.csrfToken) {
+        res.locals.csrfToken = req.csrfToken();
+        res.setHeader('X-CSRF-Token', res.locals.csrfToken);
+    }
+    next();
+});
+// CSRF error handler
+app.use((err, req, res, next) => {
+    if (err.code === 'EBADCSRFTOKEN') {
+        logger.warn('CSRF token mismatch or missing', { url: req.originalUrl, ip: req.ip });
+        return res.status(403).json({ error: 'Invalid CSRF token' });
+    }
+    next(err);
 });
 
-// Get proxy provider status
-app.get('/proxy-status', (req, res) => {
-    try {
-        const status = getProviderStatus();
-        res.json({
-            providers: status,
-            totalProviders: status.length,
-            activeProviders: status.filter(p => p.active).length,
-            lastUsedProxy: lastUsedProxyInfo
-        });
-    } catch (err) {
-        res.status(500).json({ error: 'Failed to get proxy status', details: err.message });
-    }
-});
+// MongoDB connection
+const MONGO_URI = process.env.MONGO_URI;
+let db;
+MongoClient.connect(MONGO_URI, { useUnifiedTopology: true })
+    .then(client => {
+        db = client.db('adsbooster');
+        console.log('MongoDB connected!');
+        module.exports.db = db;
+    })
+    .catch(err => console.error('MongoDB connection error:', err));
 
+// Rate limiting
+app.use(rateLimit({ windowMs: 60 * 1000, max: 60 }));
+
+// Serve static frontend files from the root directory
+app.use(express.static(__dirname));
+
+// Routes
+app.use('/api/ai', require('./routes/ai'));
+app.use('/api/file', require('./routes/file'));
+app.use('/api/analytics', require('./routes/analytics'));
+app.use('/api/auth', require('./routes/auth'));
+const stocksRouter = require('./routes/stocks');
+app.use('/api/stocks', stocksRouter);
+app.use('/proxy-status', require('./routes/proxy'));
+
+// DO NOT serve uploads/ statically in production. Only allow access via secure download route in routes/file.js
+if (process.env.NODE_ENV !== 'production') {
+    // In development, you may want to serve uploads/ for testing
+    app.use('/uploads', express.static('uploads', { index: false, dotfiles: 'deny' }));
+}
+
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-    console.log(`AdsBooster backend running on port ${PORT}`);
-    console.log('🌐 Triple proxy system loaded: Webshare.io + ProxyScrape + ScraperAPI');
-    console.log('📊 Check /proxy-status endpoint for provider usage');
+    logger.info(`Server running on port ${PORT}`);
+});
+
+process.on('uncaughtException', err => {
+    logger.error('Uncaught Exception:', err);
+});
+process.on('unhandledRejection', err => {
+    logger.error('Unhandled Rejection:', err);
 }); 

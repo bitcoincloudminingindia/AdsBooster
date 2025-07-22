@@ -615,4 +615,96 @@ async function checkProxyStatusAndShowLinks() {
 // Helper to get the selected country code from the dropdown
 function getSelectedCountry() {
     return countrySelect.value;
-} 
+}
+
+function showOrHideHeroSection() {
+    const heroSection = document.getElementById('hero-section');
+    // Show hero only on home page
+    if (window.location.pathname === '/' || window.location.pathname === '/index.html') {
+        if (heroSection) heroSection.style.display = '';
+    } else {
+        if (heroSection) heroSection.style.display = 'none';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const mainContent = document.querySelector('main');
+    const adGrid = document.getElementById('adGrid');
+
+    // --- Dynamic Content Loading (SPA-like) ---
+    async function loadTool(url) {
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                mainContent.innerHTML = '<p>Error loading tool. Please try again.</p>';
+                return;
+            }
+            const html = await response.text();
+            // Use a temporary div to parse the new content
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = html;
+            const newMain = tempDiv.querySelector('main');
+
+            if (newMain) {
+                mainContent.innerHTML = '';
+                mainContent.appendChild(newMain);
+                window.history.pushState({ path: url }, '', url);
+                showOrHideHeroSection();
+                // --- Dynamically load tool JS if needed ---
+                const toolScript = getToolScriptForUrl(url);
+                if (toolScript) {
+                    loadScript(toolScript);
+                }
+            } else {
+                mainContent.innerHTML = '<p>Could not find main content in the loaded tool.</p>';
+            }
+        } catch (error) {
+            console.error('Failed to load tool:', error);
+            mainContent.innerHTML = '<p>Failed to load the tool. Check the console for details.</p>';
+        }
+    }
+
+    // Helper: Map tool URLs to their JS files
+    function getToolScriptForUrl(url) {
+        if (url.includes('youtube-thumbnail-downloader')) return 'youtube-thumbnail-downloader.js';
+        // Add more tool JS mappings here as needed
+        return null;
+    }
+    // Helper: Dynamically load a JS file
+    function loadScript(src) {
+        const script = document.createElement('script');
+        script.src = src;
+        script.async = false;
+        document.body.appendChild(script);
+    }
+
+    // --- Intercept Clicks on Tool Links ---
+    document.body.addEventListener('click', e => {
+        const toolLink = e.target.closest('.tool-link-card, .tool-card');
+        if (toolLink && toolLink.href) {
+            e.preventDefault(); // Prevent full page reload
+            const url = new URL(toolLink.href);
+            loadTool(url.pathname);
+        }
+    });
+
+    // --- Handle Browser Back/Forward Buttons ---
+    window.addEventListener('popstate', e => {
+        if (e.state && e.state.path) {
+            loadTool(e.state.path);
+        } else {
+            // If no state, it's the initial page, so reload
+            location.reload();
+        }
+    });
+
+    // Initial page setup is handled by the existing onload/DOMContentLoaded listeners
+    showOrHideHeroSection();
+    // Scroll to All Tools section if #all-tools in URL
+    if (window.location.hash === '#all-tools') {
+        setTimeout(() => {
+            const allToolsSection = document.querySelector('.saas-multitool-dashboard');
+            if (allToolsSection) allToolsSection.scrollIntoView({ behavior: 'smooth' });
+        }, 300);
+    }
+}); 

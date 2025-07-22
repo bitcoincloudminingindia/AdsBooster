@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plagiarism Checker | AdsBooster Tools</title>
+    <meta name="description"
+        content="Free Plagiarism Checker: Check your text for plagiarism and get unique rewrite suggestions. Fast, accurate, and easy to use.">
+    <meta name="keywords"
+        content="Plagiarism Checker, Free Plagiarism, AI Plagiarism, Unique Text, Rewrite Tool, AI Tools">
+    <meta property="og:title" content="Plagiarism Checker | AdsBooster Tools">
+    <meta property="og:description"
+        content="Check your text for plagiarism and get unique rewrite suggestions. Free, fast, and accurate.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://adsbooster.onrender.com/plagiarism-checker.html">
+    <meta property="og:image" content="https://adsbooster.onrender.com/App%20Icon.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Plagiarism Checker | AdsBooster Tools">
+    <meta name="twitter:description"
+        content="Check your text for plagiarism and get unique rewrite suggestions. Free, fast, and accurate.">
+    <meta name="twitter:image" content="https://adsbooster.onrender.com/App%20Icon.png">
+    <link rel="canonical" href="https://adsbooster.onrender.com/plagiarism-checker.html">
+    <meta name="robots" content="index, follow">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .plag-form {
+            max-width: 500px;
+            margin: 2rem auto;
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 8px #0001;
+        }
+
+        .plag-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .plag-form textarea {
+            width: 100%;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border-radius: 0.4rem;
+            border: 1px solid #ccc;
+        }
+
+        .plag-result {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 0.7rem;
+            margin-top: 1rem;
+            min-height: 60px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="App Icon.png" alt="AdsBooster Logo" class="app-logo small-logo">
+        <h1 class="header-title">Plagiarism Checker</h1>
+        <a href="index.html" class="cta-btn">⬅ Back to Dashboard</a>
+    </header>
+    <main>
+        <section class="tool-section">
+            <h2>Plagiarism Checker</h2>
+            <form class="plag-form" id="plagForm">
+                <label>Enter Text:
+                    <textarea id="plagInput" rows="5" required placeholder="Paste or type your text..."></textarea>
+                </label>
+                <button type="submit" class="cta-btn">Check Plagiarism</button>
+            </form>
+            <div class="plag-result" id="plagResult"></div>
+        </section>
+    </main>
+    <script>
+        document.getElementById('plagForm').onsubmit = async function (e) {
+            e.preventDefault();
+            const text = document.getElementById('plagInput').value;
+            document.getElementById('plagResult').innerHTML = 'Checking...';
+            try {
+                const res = await fetch('http://localhost:5000/api/ai/plagiarism', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text })
+                });
+                const data = await res.json();
+                document.getElementById('plagResult').innerHTML = `<b>Plagiarism:</b> ${data.percent}%<br><b>Suggestion:</b> ${data.suggestion}`;
+            } catch (err) {
+                document.getElementById('plagResult').innerHTML = 'Error: ' + err.message;
+            }
+        }
+    </script>
+</body>
+
+</html>
