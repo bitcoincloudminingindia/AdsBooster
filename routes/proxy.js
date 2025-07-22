@@ -3,6 +3,7 @@ const router = express.Router();
 const { getProviderStatus, getProxy } = require('../proxyPool'); // Import getProxy
 const logger = require('../logger');
 const fetch = require('node-fetch');
+const axios = require('axios'); // Add at the top if not present
 
 // Change route from '/proxy-status' to '/'
 router.get('/', (req, res) => {
@@ -26,14 +27,28 @@ router.get('/test-link', async (req, res) => {
         return res.json({ success: false, error: 'Missing url or country' });
     }
 
-    // Proxy selection logic (dummy for now)
+    // Proxy selection logic
     const proxy = getProxy({ country });
+    console.log('Selected proxy:', proxy);
     if (!proxy) {
         return res.json({ success: false, error: 'No proxy available for this country' });
     }
 
-    // TODO: Proxy ke through url ko test karo (abhi dummy response)
-    return res.json({ success: true });
+    try {
+        // Proxy ke through request bhejo
+        await axios.get(url, {
+            proxy: {
+                host: proxy.axiosConfig.host,
+                port: proxy.axiosConfig.port,
+                auth: proxy.axiosConfig.auth
+            },
+            timeout: 7000
+        });
+        return res.json({ success: true });
+    } catch (err) {
+        console.error('Proxy test failed:', err.message);
+        return res.json({ success: false, error: err.message });
+    }
 });
 
 // Add /fetch endpoint for iframe proxying
