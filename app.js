@@ -35,7 +35,7 @@ let refreshCount = 0;
 let mode = 'single';
 let autoRefreshTimer = null;
 let autoRefreshTimeout = null;
-let stats = Array(10).fill().map(() => ({ loads: 0, lastUrl: '' }));
+let stats = Array(10).fill().map(() => ({ loads: 0, lastUrl: '' })); // Only 10 screens
 
 // --- Temporary state for all controls ---
 let tempState = {
@@ -96,7 +96,7 @@ async function updateGrid() {
     let active = 0;
     if (mode === 'single') {
         const url = singleLinkInput.value.trim();
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 10; i++) { // Only 10 screens
             const container = document.createElement('div');
             container.className = 'ad-frame-container';
             if (url) {
@@ -121,8 +121,8 @@ async function updateGrid() {
             adGrid.appendChild(container);
         }
     } else {
-        for (let i = 0; i < adLinks.length; i++) {
-            const url = adLinks[i].value.trim();
+        for (let i = 0; i < 10; i++) { // Only 10 screens
+            const url = adLinks[i] ? adLinks[i].value.trim() : '';
             const container = document.createElement('div');
             container.className = 'ad-frame-container';
             if (url) {
