@@ -146,7 +146,7 @@ async function updateGrid() {
             adGrid.appendChild(container);
         }
     }
-    activeScreens.innerText = `Active Screens: ${active}`;
+    activeScreens.innerText = `Active Screens: ${active}/10`;
 }
 
 function renderIframe(container, url, idx) {
