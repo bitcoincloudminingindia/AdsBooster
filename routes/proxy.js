@@ -4,6 +4,7 @@ const { getProviderStatus, getProxy } = require('../proxyPool'); // Import getPr
 const logger = require('../logger');
 const fetch = require('node-fetch');
 const axios = require('axios'); // Add at the top if not present
+const HttpsProxyAgent = require('https-proxy-agent'); // Add this at the top
 
 // Change route from '/proxy-status' to '/'
 router.get('/', (req, res) => {
@@ -36,19 +37,18 @@ router.get('/test-link', async (req, res) => {
 
     try {
         if (proxy.provider === 'ScraperAPI' && proxy.scraperApiUrl) {
-            // ScraperAPI ke liye direct URL par request bhejein
             await axios.get(proxy.scraperApiUrl + encodeURIComponent(url), {
                 headers: proxy.headers,
                 timeout: 7000
             });
         } else if (proxy.axiosConfig) {
-            // Normal HTTP proxy ke liye
+            // Use https-proxy-agent for HTTP proxies
+            const { host, port, auth } = proxy.axiosConfig;
+            const proxyUrl = `http://${auth.username}:${auth.password}@${host}:${port}`;
+            const agent = new HttpsProxyAgent(proxyUrl);
             await axios.get(url, {
-                proxy: {
-                    host: proxy.axiosConfig.host,
-                    port: proxy.axiosConfig.port,
-                    auth: proxy.axiosConfig.auth
-                },
+                httpAgent: agent,
+                httpsAgent: agent,
                 timeout: 7000
             });
         } else {
