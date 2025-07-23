@@ -329,6 +329,24 @@ button:disabled {
     display: block;
 }
 
+#adGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+  margin: 2rem auto;
+  max-width: 1200px;
+}
+@media (max-width: 900px) {
+  #adGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 600px) {
+  #adGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
 #adGrid .placeholder {
     position: absolute;
     inset: 0;
