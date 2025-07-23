@@ -187,20 +187,35 @@
     <!-- Adsterra Social Bar -->
     <script type='text/javascript' src='https://resteddiabetepocket.com/27/ae/22/27ae22e42040d85d48ac18bf38f94713.js'></script>
     <script>
-        function generateKeywords() {
+        async function generateKeywords() {
             var cat = document.getElementById('cat').value;
-            var keywords = {
-                dating: ['free dating', 'adult dating', 'find singles', 'local hookups', 'mature dating', 'discreet affairs'],
-                cam: ['live cam', 'adult cam', 'webcam girls', 'private show', 'cam chat', 'live xxx cam'],
-                tube: ['free porn', 'hd videos', 'xxx tube', 'adult movies', 'sex videos', 'trending porn'],
-                games: ['adult games', 'sex games', 'virtual dating', 'erotic games', '3d adult game', 'play now'],
-                other: ['adult ads', 'high cpm', 'traffic boost', 'ad network', 'adult traffic', 'monetize adult site']
-            };
-            var pick = keywords[cat] || keywords.other;
-            // Shuffle for demo randomness
-            pick = pick.sort(() => Math.random() - 0.5);
-            var html = '<ul class="keywords">' + pick.map(k => '<li>' + k + '</li>').join('') + '</ul>';
-            document.getElementById('keywordResult').innerHTML = html;
+            var resultDiv = document.getElementById('keywordResult');
+            if (!cat) {
+                resultDiv.innerText = 'Please select a category.';
+                return;
+            }
+            resultDiv.innerText = 'Generating...';
+            try {
+                const res = await fetch('/ai/adult-keyword-generator', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ category: cat })
+                });
+                const data = await res.json();
+                if (data.result) {
+                    // Try to display as a list if comma-separated
+                    if (data.result.includes(',')) {
+                        const keywords = data.result.split(',').map(k => k.trim()).filter(Boolean);
+                        resultDiv.innerHTML = '<ul class="keywords">' + keywords.map(k => '<li>' + k + '</li>').join('') + '</ul>';
+                    } else {
+                        resultDiv.innerText = data.result;
+                    }
+                } else {
+                    resultDiv.innerText = data.error || 'No result.';
+                }
+            } catch (err) {
+                resultDiv.innerText = 'Error: ' + err.message;
+            }
         }
     </script>
 </body>

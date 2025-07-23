@@ -193,26 +193,31 @@
     <!-- Adsterra Social Bar -->
     <script type='text/javascript' src='https://resteddiabetepocket.com/27/ae/22/27ae22e42040d85d48ac18bf38f94713.js'></script>
     <script>
-        // Real CPM data (industry averages, USD)
-        const cpmData = {
-            US: { desktop: 3.5, mobile: 2.5 },
-            UK: { desktop: 3.0, mobile: 2.2 },
-            DE: { desktop: 2.5, mobile: 1.8 },
-            FR: { desktop: 2.2, mobile: 1.6 },
-            IN: { desktop: 0.8, mobile: 0.5 },
-            BR: { desktop: 0.7, mobile: 0.4 }
-        };
-        function estimateCPM() {
+        async function estimateCPM() {
             var geo = document.getElementById('geo').value;
             var traffic = document.getElementById('traffic').value;
             var impressions = Number(document.getElementById('impressions').value);
-            var cpm = 0;
-            if (cpmData[geo] && cpmData[geo][traffic]) {
-                cpm = cpmData[geo][traffic];
-                var revenue = (impressions / 1000) * cpm;
-                document.getElementById('cpmResult').innerText = 'Estimated CPM: $' + cpm.toFixed(2) + '\nEstimated Revenue: $' + revenue.toFixed(2);
-            } else {
-                document.getElementById('cpmResult').innerText = 'No CPM data available for selected geo/traffic.';
+            var resultDiv = document.getElementById('cpmResult');
+            if (!geo || !traffic || !impressions) {
+                resultDiv.innerText = 'Please fill all fields.';
+                return;
+            }
+            resultDiv.innerText = 'Estimating...';
+            try {
+                const res = await fetch('/ai/adult-cpm-estimator', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ country: geo, trafficType: traffic })
+                });
+                const data = await res.json();
+                if (data.result) {
+                    // Optionally, add revenue calculation if CPM is a number in the result
+                    resultDiv.innerText = data.result;
+                } else {
+                    resultDiv.innerText = data.error || 'No result.';
+                }
+            } catch (err) {
+                resultDiv.innerText = 'Error: ' + err.message;
             }
         }
     </script>

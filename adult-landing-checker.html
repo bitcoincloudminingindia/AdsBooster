@@ -177,20 +177,28 @@
     <!-- Adsterra Social Bar -->
     <script type='text/javascript' src='https://resteddiabetepocket.com/27/ae/22/27ae22e42040d85d48ac18bf38f94713.js'></script>
     <script>
-        function checkLanding() {
-            var url = document.getElementById('landingUrl').value.toLowerCase();
+        async function checkLanding() {
+            var url = document.getElementById('landingUrl').value.trim();
+            var resultDiv = document.getElementById('landingResult');
             if (!url) {
-                document.getElementById('landingResult').innerText = 'Please enter a URL.';
+                resultDiv.innerText = 'Please enter a URL.';
                 return;
             }
-            var adultWords = ['adult', 'sex', 'porn', 'cam', 'xxx', 'escort'];
-            var flagged = adultWords.some(word => url.includes(word));
-            if (flagged) {
-                document.getElementById('landingResult').innerText = '⚠️ This landing page may be flagged as adult content.';
-                document.getElementById('landingResult').className = 'result';
-            } else {
-                document.getElementById('landingResult').innerText = '✅ This landing page is likely safe for non-adult categories.';
-                document.getElementById('landingResult').className = 'result safe';
+            resultDiv.innerText = 'Checking...';
+            try {
+                const res = await fetch('/ai/adult-landing-checker', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url })
+                });
+                const data = await res.json();
+                if (data.result) {
+                    resultDiv.innerText = data.result;
+                } else {
+                    resultDiv.innerText = data.error || 'No result.';
+                }
+            } catch (err) {
+                resultDiv.innerText = 'Error: ' + err.message;
             }
         }
     </script>
