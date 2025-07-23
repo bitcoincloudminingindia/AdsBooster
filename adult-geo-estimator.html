@@ -141,17 +141,29 @@
     </div>
     <!-- All Tools Section End -->
     <script>
-        // Real Tier-1 countries for ad revenue
-        const tier1Countries = [
-            'United States', 'United Kingdom', 'Germany', 'France', 'Canada', 'Australia', 'Netherlands', 'Sweden', 'Switzerland', 'Norway'
-        ];
-        function estimateGeo() {
+        async function estimateGeo() {
             var volume = document.getElementById('volume').value;
-            let top = [];
-            if (volume === 'low') top = tier1Countries.slice(0, 3);
-            else if (volume === 'medium') top = tier1Countries.slice(0, 5);
-            else top = tier1Countries.slice(0, 7);
-            document.getElementById('geoResult').innerText = 'Top Tier-1 Countries: ' + top.join(', ');
+            var resultDiv = document.getElementById('geoResult');
+            if (!volume) {
+                resultDiv.innerText = 'Please select a traffic volume.';
+                return;
+            }
+            resultDiv.innerText = 'Estimating...';
+            try {
+                const res = await fetch('/ai/adult-geo-estimator', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ volume })
+                });
+                const data = await res.json();
+                if (data.result) {
+                    resultDiv.innerText = data.result;
+                } else {
+                    resultDiv.innerText = data.error || 'No result.';
+                }
+            } catch (err) {
+                resultDiv.innerText = 'Error: ' + err.message;
+            }
         }
     </script>
 </body>

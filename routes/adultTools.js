@@ -55,4 +55,17 @@ router.post('/adult-keyword-generator', async (req, res) => {
     }
 });
 
+// 5. Adult Geo Estimator
+router.post('/adult-geo-estimator', async (req, res) => {
+    const { volume } = req.body;
+    if (!volume) return res.status(400).json({ error: 'Traffic volume is required' });
+    const prompt = `You are an ad monetization expert. For adult ad traffic with ${volume} volume, list the best countries (Tier-1, Tier-2, etc.) for high CPM and fill rates. Give a short explanation.`;
+    try {
+        const result = await groqTextCompletion(prompt);
+        res.json({ result });
+    } catch (err) {
+        res.status(500).json({ error: 'AI error', details: err.message });
+    }
+});
+
 module.exports = router;
