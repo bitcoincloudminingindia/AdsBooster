@@ -94,57 +94,35 @@ async function testLinkWithProxy(url, country) {
 async function updateGrid() {
     adGrid.innerHTML = '';
     let active = 0;
-    if (mode === 'single') {
-        const url = singleLinkInput.value.trim();
-        for (let i = 0; i < 10; i++) { // Only 10 screens
-            const container = document.createElement('div');
-            container.className = 'ad-frame-container';
-            if (url) {
-                // Test link before rendering iframe
-                const country = getSelectedCountry();
-                const ok = await testLinkWithProxy(url, country);
-                if (ok) {
-                    active++;
-                    renderIframe(container, url, i);
-                } else {
-                    const ph = document.createElement('div');
-                    ph.className = 'placeholder error';
-                    ph.innerText = 'Link not accessible from selected country/proxy';
-                    container.appendChild(ph);
-                }
+    // Always render exactly 10 screens, in a single grid
+    for (let i = 0; i < 10; i++) {
+        let url = '';
+        if (mode === 'single') {
+            url = singleLinkInput.value.trim();
+        } else {
+            url = adLinks[i] ? adLinks[i].value.trim() : '';
+        }
+        const container = document.createElement('div');
+        container.className = 'ad-frame-container';
+        if (url) {
+            const country = getSelectedCountry();
+            const ok = await testLinkWithProxy(url, country);
+            if (ok) {
+                active++;
+                renderIframe(container, url, i);
             } else {
                 const ph = document.createElement('div');
-                ph.className = 'placeholder';
-                ph.innerText = 'No link';
+                ph.className = 'placeholder error';
+                ph.innerText = 'Link not accessible from selected country/proxy';
                 container.appendChild(ph);
             }
-            adGrid.appendChild(container);
+        } else {
+            const ph = document.createElement('div');
+            ph.className = 'placeholder';
+            ph.innerText = 'No link';
+            container.appendChild(ph);
         }
-    } else {
-        for (let i = 0; i < 10; i++) { // Only 10 screens
-            const url = adLinks[i] ? adLinks[i].value.trim() : '';
-            const container = document.createElement('div');
-            container.className = 'ad-frame-container';
-            if (url) {
-                const country = getSelectedCountry();
-                const ok = await testLinkWithProxy(url, country);
-                if (ok) {
-                    active++;
-                    renderIframe(container, url, i);
-                } else {
-                    const ph = document.createElement('div');
-                    ph.className = 'placeholder error';
-                    ph.innerText = 'Link not accessible from selected country/proxy';
-                    container.appendChild(ph);
-                }
-            } else {
-                const ph = document.createElement('div');
-                ph.className = 'placeholder';
-                ph.innerText = 'No link';
-                container.appendChild(ph);
-            }
-            adGrid.appendChild(container);
-        }
+        adGrid.appendChild(container);
     }
     activeScreens.innerText = `Active Screens: ${active}/10`;
 }
