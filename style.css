@@ -332,6 +332,7 @@ button:disabled {
 #adGrid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
+  grid-auto-rows: minmax(200px, auto);
   gap: 1rem;
   margin: 2rem auto;
   max-width: 1200px;
