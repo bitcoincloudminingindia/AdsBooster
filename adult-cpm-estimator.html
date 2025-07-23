@@ -94,6 +94,12 @@
             text-decoration: underline;
         }
 
+        .note {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
         @media (max-width: 600px) {
             .container {
                 max-width: 98vw;
@@ -118,9 +124,19 @@
 </head>
 
 <body>
+    <!-- Language Switcher -->
+    <div style="text-align:right; margin: 1rem 0;">
+      <label for="langSwitch"><b>Language:</b></label>
+      <select id="langSwitch">
+        <option value="en">English</option>
+        <option value="hi">हिन्दी</option>
+      </select>
+    </div>
     <div class="container">
-        <h1>Adult CPM Estimator</h1>
-        <label for="geo">Select Country</label>
+        <h1 class="en">Adult CPM Estimator</h1>
+        <h1 class="hi" style="display:none;">एडल्ट CPM अनुमानक</h1>
+        <label for="geo" class="en">Select Country</label>
+        <label for="geo" class="hi" style="display:none;">देश चुनें</label>
         <select id="geo">
             <option value="US">United States</option>
             <option value="UK">United Kingdom</option>
@@ -129,16 +145,22 @@
             <option value="IN">India</option>
             <option value="BR">Brazil</option>
         </select>
-        <label for="traffic">Traffic Type</label>
+        <label for="traffic" class="en">Traffic Type</label>
+        <label for="traffic" class="hi" style="display:none;">ट्रैफिक प्रकार</label>
         <select id="traffic">
             <option value="desktop">Desktop</option>
             <option value="mobile">Mobile</option>
         </select>
-        <label for="impressions">Impressions</label>
+        <label for="impressions" class="en">Impressions</label>
+        <label for="impressions" class="hi" style="display:none;">इम्प्रेशन्स</label>
         <input type="number" id="impressions" value="10000" min="0">
-        <button onclick="estimateCPM()">Estimate</button>
+        <button onclick="estimateCPM()" class="en">Estimate</button>
+        <button onclick="estimateCPM()" class="hi" style="display:none;">अनुमान लगाएं</button>
         <div class="result" id="cpmResult"></div>
-        <a href="/" class="back-link">← Back to Home</a>
+        <div class="note en">This tool uses AI to estimate CPM for adult ad traffic. For real data, use ad network analytics.</div>
+        <div class="note hi" style="display:none;">यह टूल एडल्ट ऐड ट्रैफिक के लिए CPM का अनुमान AI से लगाता है। असली डेटा के लिए ऐड नेटवर्क एनालिटिक्स देखें।</div>
+        <a href="/" class="back-link en">← Back to Home</a>
+        <a href="/" class="back-link hi" style="display:none;">← होम पेज पर जाएं</a>
     </div>
     <!-- All Tools Section Start -->
     <div class="container all-tools-container">
@@ -193,16 +215,22 @@
     <!-- Adsterra Social Bar -->
     <script type='text/javascript' src='https://resteddiabetepocket.com/27/ae/22/27ae22e42040d85d48ac18bf38f94713.js'></script>
     <script>
+        document.getElementById('langSwitch').addEventListener('change', function() {
+            var lang = this.value;
+            document.querySelectorAll('.en').forEach(e => e.style.display = lang === 'en' ? '' : 'none');
+            document.querySelectorAll('.hi').forEach(e => e.style.display = lang === 'hi' ? '' : 'none');
+        });
         async function estimateCPM() {
             var geo = document.getElementById('geo').value;
             var traffic = document.getElementById('traffic').value;
             var impressions = Number(document.getElementById('impressions').value);
             var resultDiv = document.getElementById('cpmResult');
+            var lang = document.getElementById('langSwitch').value;
             if (!geo || !traffic || !impressions) {
-                resultDiv.innerText = 'Please fill all fields.';
+                resultDiv.innerText = lang === 'en' ? 'Please fill all fields.' : 'कृपया सभी फ़ील्ड भरें।';
                 return;
             }
-            resultDiv.innerText = 'Estimating...';
+            resultDiv.innerText = lang === 'en' ? 'Estimating...' : 'अनुमान लगाया जा रहा है...';
             try {
                 const res = await fetch('/ai/adult-cpm-estimator', {
                     method: 'POST',
@@ -211,13 +239,12 @@
                 });
                 const data = await res.json();
                 if (data.result) {
-                    // Optionally, add revenue calculation if CPM is a number in the result
                     resultDiv.innerText = data.result;
                 } else {
-                    resultDiv.innerText = data.error || 'No result.';
+                    resultDiv.innerText = (data.error || 'No result.') + (lang === 'hi' ? ' (कोई परिणाम नहीं मिला)' : '');
                 }
             } catch (err) {
-                resultDiv.innerText = 'Error: ' + err.message;
+                resultDiv.innerText = (lang === 'en' ? 'Error: ' : 'त्रुटि: ') + err.message;
             }
         }
     </script>

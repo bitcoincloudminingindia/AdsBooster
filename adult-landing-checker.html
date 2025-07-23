@@ -114,15 +114,32 @@
 </head>
 
 <body>
+    <!-- Language Switcher -->
+    <div style="text-align:right; margin: 1rem 0;">
+      <label for="langSwitch"><b>Language:</b></label>
+      <select id="langSwitch">
+        <option value="en">English</option>
+        <option value="hi">हिन्दी</option>
+      </select>
+    </div>
     <div class="container">
-        <h1>Adult Landing Page Checker</h1>
-        <label for="landingUrl">Landing Page URL</label>
+        <h1 class="en">Adult Landing Page Checker</h1>
+        <h1 class="hi" style="display:none;">एडल्ट लैंडिंग पेज चेकर</h1>
+        <label for="landingUrl" class="en">Landing Page URL</label>
+        <label for="landingUrl" class="hi" style="display:none;">लैंडिंग पेज URL</label>
         <input type="text" id="landingUrl" placeholder="Paste your landing page URL here">
-        <button onclick="checkLanding()">Check</button>
+        <button onclick="checkLanding()" class="en">Check</button>
+        <button onclick="checkLanding()" class="hi" style="display:none;">जांचें</button>
         <div class="result" id="landingResult"></div>
-        <div class="note">Demo: This tool simulates a keyword scan for adult content. For real compliance, always review
-            ad network policies.</div>
-        <a href="/" class="back-link">← Back to Home</a>
+        <div class="note en">Demo: This tool simulates a keyword scan for adult content. For real compliance, always review ad network policies.</div>
+        <div class="note hi" style="display:none;">डेमो: यह टूल कीवर्ड स्कैन के जरिए एडल्ट कंटेंट चेक करता है। असली कंप्लायंस के लिए हमेशा ऐड नेटवर्क की पॉलिसी देखें।</div>
+        <a href="/" class="back-link en">← Back to Home</a>
+        <a href="/" class="back-link hi" style="display:none;">← होम पेज पर जाएं</a>
+    </div>
+    <!-- Further improvements note -->
+    <div style="text-align:center;margin:2rem 0 1rem 0;font-size:1rem;color:#1976d2;">
+      <span class="en">If you want further improvements (like more detailed prompts, analytics, or language switcher), let me know!</span>
+      <span class="hi" style="display:none;">अगर आप और सुधार चाहते हैं (जैसे और डिटेल्ड प्रॉम्प्ट, एनालिटिक्स, या भाषा स्विचर), तो मुझे बताएं!</span>
     </div>
     <!-- All Tools Section Start -->
     <div class="container all-tools-container">
@@ -177,14 +194,20 @@
     <!-- Adsterra Social Bar -->
     <script type='text/javascript' src='https://resteddiabetepocket.com/27/ae/22/27ae22e42040d85d48ac18bf38f94713.js'></script>
     <script>
+        document.getElementById('langSwitch').addEventListener('change', function() {
+            var lang = this.value;
+            document.querySelectorAll('.en').forEach(e => e.style.display = lang === 'en' ? '' : 'none');
+            document.querySelectorAll('.hi').forEach(e => e.style.display = lang === 'hi' ? '' : 'none');
+        });
         async function checkLanding() {
             var url = document.getElementById('landingUrl').value.trim();
             var resultDiv = document.getElementById('landingResult');
+            var lang = document.getElementById('langSwitch').value;
             if (!url) {
-                resultDiv.innerText = 'Please enter a URL.';
+                resultDiv.innerText = lang === 'en' ? 'Please enter a URL.' : 'कृपया एक URL दर्ज करें।';
                 return;
             }
-            resultDiv.innerText = 'Checking...';
+            resultDiv.innerText = lang === 'en' ? 'Checking...' : 'जांच हो रही है...';
             try {
                 const res = await fetch('/ai/adult-landing-checker', {
                     method: 'POST',
@@ -195,10 +218,10 @@
                 if (data.result) {
                     resultDiv.innerText = data.result;
                 } else {
-                    resultDiv.innerText = data.error || 'No result.';
+                    resultDiv.innerText = (data.error || 'No result.') + (lang === 'hi' ? ' (कोई परिणाम नहीं मिला)' : '');
                 }
             } catch (err) {
-                resultDiv.innerText = 'Error: ' + err.message;
+                resultDiv.innerText = (lang === 'en' ? 'Error: ' : 'त्रुटि: ') + err.message;
             }
         }
     </script>
