@@ -158,6 +158,22 @@ function renderIframe(container, url, idx) {
         removeSpinner();
     };
     container.appendChild(iframe);
+    // Add Adsterra 160x300 banner below the iframe
+    const adDiv = document.createElement('div');
+    adDiv.style = 'text-align:center;margin:0.5rem 0;';
+    adDiv.innerHTML = `
+    <script type="text/javascript">
+    atOptions = {
+        'key' : '7098f1b0fbf5bf92f6ad421fa1acbcdd',
+        'format' : 'iframe',
+        'height' : 300,
+        'width' : 160,
+        'params' : {}
+    };
+    </script>
+    <script type="text/javascript" src="//resteddiabetepocket.com/7098f1b0fbf5bf92f6ad421fa1acbcdd/invoke.js"></script>
+    `;
+    container.appendChild(adDiv);
 }
 
 // --- Helper: Check if at least one valid link exists ---
