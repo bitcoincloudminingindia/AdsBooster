@@ -177,24 +177,33 @@
     <!-- Adsterra Social Bar -->
     <script type='text/javascript' src='https://resteddiabetepocket.com/27/ae/22/27ae22e42040d85d48ac18bf38f94713.js'></script>
     <script>
-        // Simple production-ready compliance checker (expandable)
-        const blacklist = [
-            'malware', 'phishing', 'casino', 'porn', 'scam',
-            'badsite.com', 'illegal-ads.net', 'virus-download.com'
-        ];
-        function checkAdult() {
-            var url = document.getElementById('adUrl').value.trim().toLowerCase();
+        async function checkAdult() {
+            var url = document.getElementById('adUrl').value.trim();
+            var resultDiv = document.getElementById('checkResult');
             if (!url) {
-                document.getElementById('checkResult').innerText = 'Please enter an ad link or URL.';
+                resultDiv.innerText = 'Please enter an ad link or URL.';
+                resultDiv.className = 'result';
                 return;
             }
-            const flagged = blacklist.some(word => url.includes(word));
-            if (flagged) {
-                document.getElementById('checkResult').innerText = 'Warning: This ad/link may violate ad network policies (flagged for risky content or domain).';
-                document.getElementById('checkResult').className = 'result';
-            } else {
-                document.getElementById('checkResult').innerText = 'This ad/link appears compliant with major ad network policies.';
-                document.getElementById('checkResult').className = 'result safe';
+            resultDiv.innerText = 'Checking...';
+            resultDiv.className = 'result';
+            try {
+                const res = await fetch('/ai/adult-ad-checker', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url })
+                });
+                const data = await res.json();
+                if (data.result) {
+                    resultDiv.innerText = data.result;
+                    resultDiv.className = 'result';
+                } else {
+                    resultDiv.innerText = data.error || 'No result.';
+                    resultDiv.className = 'result';
+                }
+            } catch (err) {
+                resultDiv.innerText = 'Error: ' + err.message;
+                resultDiv.className = 'result';
             }
         }
     </script>
