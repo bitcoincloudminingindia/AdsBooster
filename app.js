@@ -419,6 +419,9 @@ function checkDeviceEligibility() {
     // Device memory (in GB) and CPU cores
     const mem = navigator.deviceMemory || 2;
     const cpu = navigator.hardwareConcurrency || 2;
+    // Temporarily allow all devices for testing
+    return true;
+    
     if (mem < 2 || cpu < 2) {
         showDeviceBlockMsg('Low-end device detected. Ads are disabled for best CPM.');
         return false;
@@ -438,6 +441,9 @@ function showDeviceBlockMsg(msg) {
 }
 function checkCountryEligibility() {
     const code = countrySelect.value;
+    // Temporarily allow all countries for testing
+    return true;
+    
     if (code && !isHighCpmCountry(code)) {
         showDeviceBlockMsg('Only high-CPM countries (US, UK, CA, AU) are allowed for ads.');
         return false;
@@ -564,6 +570,34 @@ window.addEventListener('DOMContentLoaded', updateApplyBtnState);
 // On page load, set refresh mode
 window.addEventListener('DOMContentLoaded', () => {
     updateRefreshMode();
+    
+    // Debugging helper - show ads status
+    setTimeout(() => {
+        const debugInfo = {
+            prequalAccepted: localStorage.getItem('adsbooster-prequal-accepted'),
+            deviceMemory: navigator.deviceMemory || 'unknown',
+            cpuCores: navigator.hardwareConcurrency || 'unknown',
+            selectedCountry: countrySelect.value,
+            adBlockerDetected: typeof window.getComputedStyle === 'undefined'
+        };
+        console.log('🔍 Ads Debug Info:', debugInfo);
+        
+        // Show status in UI temporarily
+        const statusDiv = document.createElement('div');
+        statusDiv.style.cssText = 'position:fixed;top:10px;right:10px;background:#1976d2;color:white;padding:10px;border-radius:5px;z-index:9999;font-size:12px;max-width:300px;';
+        statusDiv.innerHTML = `
+            <strong>Ads Status:</strong><br>
+            Pre-qual: ${debugInfo.prequalAccepted === '1' ? '✅' : '❌'}<br>
+            Device OK: ✅ (temporarily allowed)<br>
+            Country OK: ✅ (temporarily allowed)<br>
+            Memory: ${debugInfo.deviceMemory}GB<br>
+            CPU: ${debugInfo.cpuCores} cores
+        `;
+        document.body.appendChild(statusDiv);
+        
+        // Auto remove after 10 seconds
+        setTimeout(() => statusDiv.remove(), 10000);
+    }, 2000);
 });
 
 document.getElementById('endTaskBtn').onclick = () => {

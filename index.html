@@ -61,6 +61,11 @@
     </nav>
     <div id="hilltopads-video-slot" class="hilltopads-video-slot">
         <!-- Video Slider Ad will load here -->
+        <!-- Fallback Ad if external scripts don't load -->
+        <div id="fallback-ad" style="background: #f0f4f8; border: 2px dashed #1976d2; padding: 20px; text-align: center; margin: 10px 0; border-radius: 8px;">
+            <h3 style="color: #1976d2; margin: 0 0 10px 0;">🚀 Sample Ad Space</h3>
+            <p style="margin: 0; color: #666;">Ads will appear here when properly configured</p>
+        </div>
     </div>
     <script>
         (function (fbqhv) {
@@ -70,6 +75,14 @@
             s.src = "//flaky-bother.com/bYX.V/smdcGulv0gYFWmcz/IeJmU9vuGZ/UklbknPBT/YM1rMgjiM/xcM/TjEetuNmjoURyuM/znE/xcMmgO";
             s.async = true;
             s.referrerPolicy = 'no-referrer-when-downgrade';
+            s.onerror = function() {
+                // Show fallback ad if script fails to load
+                document.getElementById('fallback-ad').style.display = 'block';
+            };
+            s.onload = function() {
+                // Hide fallback ad if script loads successfully
+                document.getElementById('fallback-ad').style.display = 'none';
+            };
             document.getElementById("hilltopads-video-slot").appendChild(s);
         })({})
     </script>
