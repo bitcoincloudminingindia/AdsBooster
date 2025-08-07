@@ -1062,6 +1062,61 @@ body.dark {
     text-align: center;
 }
 
+/* Header ad container */
+.header-ad-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 10px 0;
+    background: #f5f5f5;
+    min-height: 90px;
+}
+
+/* Video ad container */
+.hilltopads-video-slot {
+    width: 100%;
+    max-width: 1200px;
+    margin: 20px auto;
+    text-align: center;
+    min-height: 250px;
+    background: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Video ad container inner */
+#video-ad-container {
+    width: 100%;
+}
+
+/* Ad container for banner ads */
+.ad-container {
+    padding: 20px;
+    color: #666;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-align: center;
+    margin: 10px 0;
+}
+
+/* Ad fallback style */
+.ad-fallback {
+    padding: 20px;
+    color: #666;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-align: center;
+}
+
+/* Theme color for modern browsers */
+meta[name="theme-color"] {
+    content: var(--primary);
+}
+
 .nav-logo-img {
     height: 32px;
     vertical-align: middle;
