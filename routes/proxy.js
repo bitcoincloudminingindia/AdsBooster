@@ -4,13 +4,14 @@ const { getProviderStatus } = require('../proxyPool');
 const logger = require('../logger');
 const fetch = require('node-fetch');
 
-router.get('/proxy-status', (req, res) => {
+// Status endpoint for proxy information
+router.get('/status', (req, res) => {
     try {
         // If you add query params in the future, use express-validator here for validation.
         const status = getProviderStatus();
         res.json({ status, timestamp: new Date().toISOString() });
     } catch (err) {
-        logger.error('Error in /proxy-status', err);
+        logger.error('Error in /api/proxy/status', err);
         res.status(500).json({ error: 'Proxy status error', details: err.message });
     }
 });

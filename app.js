@@ -585,7 +585,7 @@ multiLinkSection.style.display = 'none';
 // Add function to check proxy status after Apply
 async function checkProxyStatusAndShowLinks() {
     try {
-        const response = await fetch('/proxy-status');
+        const response = await fetch('/api/proxy/status');
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }

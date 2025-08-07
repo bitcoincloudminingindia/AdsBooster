@@ -111,7 +111,7 @@ app.use('/api/analytics', require('./routes/analytics'));
 app.use('/api/auth', require('./routes/auth'));
 const stocksRouter = require('./routes/stocks');
 app.use('/api/stocks', stocksRouter);
-app.use('/proxy-status', require('./routes/proxy'));
+app.use('/api/proxy', require('./routes/proxy'));
 
 // Add after all other routes
 const geoip = require('geoip-lite');
