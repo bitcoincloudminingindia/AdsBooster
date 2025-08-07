@@ -586,12 +586,22 @@ multiLinkSection.style.display = 'none';
 async function checkProxyStatusAndShowLinks() {
     try {
         const response = await fetch('/proxy-status');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
-        // Find the selected country in the proxy list
-        const selectedCountry = getSelectedCountry();
-        const activeProvider = data.providers.find(p => p.country === selectedCountry && p.active);
-        if (activeProvider) {
-            // Proxy for selected country is active, show link input
+        
+        // Check if the response contains the expected structure
+        if (!data || !data.status) {
+            throw new Error('Invalid response format from server');
+        }
+
+        // The server returns a status object, not a providers array
+        // We'll consider the proxy active if we get a valid status
+        const isProxyActive = data.status && Object.keys(data.status).length > 0;
+        
+        if (isProxyActive) {
+            // Proxy is active, show link input based on mode
             if (mode === 'single') {
                 singleLinkSection.style.display = '';
                 multiLinkSection.style.display = 'none';
@@ -603,12 +613,13 @@ async function checkProxyStatusAndShowLinks() {
         } else {
             singleLinkSection.style.display = 'none';
             multiLinkSection.style.display = 'none';
-            document.getElementById('applyStatus').innerText = 'No active proxy for selected country. Please select another country or try again.';
+            document.getElementById('applyStatus').innerText = 'Proxy status unavailable. Please try again later.';
         }
     } catch (err) {
+        console.error('Proxy status check failed:', err);
         singleLinkSection.style.display = 'none';
         multiLinkSection.style.display = 'none';
-        document.getElementById('applyStatus').innerText = 'Error checking proxy status: ' + err.message;
+        document.getElementById('applyStatus').innerText = 'Error checking proxy status: ' + (err.message || 'Unknown error');
     }
 }
 
