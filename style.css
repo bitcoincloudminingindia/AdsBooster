@@ -1055,6 +1055,13 @@ body.dark {
     }
 }
 
+/* Ad Slots */
+.ad-slot {
+    margin: 20px auto;
+    max-width: 100%;
+    text-align: center;
+}
+
 .nav-logo-img {
     height: 32px;
     vertical-align: middle;
